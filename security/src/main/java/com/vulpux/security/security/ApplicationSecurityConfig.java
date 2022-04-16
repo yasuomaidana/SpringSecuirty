@@ -12,6 +12,10 @@ public class ApplicationSecurityConfig extends WebSecurityConfigurerAdapter {
     protected void configure(HttpSecurity http) throws Exception {
         http
                 .authorizeHttpRequests()
+                //WhiteListing urls
+                .antMatchers("/","index","/css/*","/js/*")
+                .permitAll()
+                
                 .anyRequest()
                 .authenticated()
                 .and()
