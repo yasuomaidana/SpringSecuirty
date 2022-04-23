@@ -17,7 +17,7 @@ public class StudentManagementController {
     public List<Student> getAllStudents(){
         return STUDENTS;
     }
-    
+
     public void registerNewStudent(Student student){
         System.out.println(student);
     }
@@ -27,6 +27,6 @@ public class StudentManagementController {
     }
 
     public void updateStudent(Integer studentId, Student student){
-        System.out.println(student);
+        System.out.println(String.format("%s %s",student, studentId));
     }
 }
