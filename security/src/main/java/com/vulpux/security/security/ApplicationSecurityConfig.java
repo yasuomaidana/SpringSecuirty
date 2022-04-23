@@ -13,8 +13,7 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.provisioning.InMemoryUserDetailsManager;
 
-import static com.vulpux.security.security.ApplicationUserRole.ADMIN;
-import static com.vulpux.security.security.ApplicationUserRole.STUDENT;
+import static com.vulpux.security.security.ApplicationUserRole.*;
 
 @Configuration
 @EnableWebSecurity
@@ -54,6 +53,13 @@ public class ApplicationSecurityConfig extends WebSecurityConfigurerAdapter {
                 .roles(ADMIN.name())
                 .build();
 
-        return new InMemoryUserDetailsManager(annSmith,lindaUser);
+        UserDetails tomUser =User
+                .builder()
+                .username("tom")
+                .password(passwordEncoder.encode("pass"))
+                .roles(ADMIN_TRAINEE.name())
+                .build();
+
+        return new InMemoryUserDetailsManager(annSmith,lindaUser,tomUser);
     }
 }
