@@ -1,7 +1,6 @@
 package com.vulpux.security.student;
 
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.Arrays;
 import java.util.List;
@@ -14,19 +13,23 @@ public class StudentManagementController {
             new Student("Maria Jones",2),
             new Student("Ana Smith",3));
 
+    @GetMapping
     public List<Student> getAllStudents(){
         return STUDENTS;
     }
 
-    public void registerNewStudent(Student student){
+    @PostMapping
+    public void registerNewStudent(@RequestBody Student student){
         System.out.println(student);
     }
 
-    public void deleteStudent(Integer studentId){
+    @DeleteMapping(path = "{studentId}")
+    public void deleteStudent(@PathVariable("studentId") Integer studentId){
         System.out.println(studentId);
     }
 
-    public void updateStudent(Integer studentId, Student student){
+    @PutMapping(path = "{studentId}")
+    public void updateStudent(@PathVariable("studentId") Integer studentId, @RequestBody Student student){
         System.out.println(String.format("%s %s",student, studentId));
     }
 }
