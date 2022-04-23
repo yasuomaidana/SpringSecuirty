@@ -31,9 +31,9 @@ public class ApplicationSecurityConfig extends WebSecurityConfigurerAdapter {
                 //WhiteListing urls
                 .antMatchers("/","index","/css/*","/js/*").permitAll()
                 .antMatchers("/api/**").hasRole(STUDENT.name())
-                .antMatchers(DELETE,"/management/api/**").hasAuthority(COURSE_WRITE.name())
-                .antMatchers(POST,"/management/api/**").hasAuthority(COURSE_WRITE.name())
-                .antMatchers(PUT,"/management/api/**").hasAuthority(COURSE_WRITE.name())
+                .antMatchers(DELETE,"/management/api/**").hasAuthority(COURSE_WRITE.getPermission())
+                .antMatchers(POST,"/management/api/**").hasAuthority(COURSE_WRITE.getPermission())
+                .antMatchers(PUT,"/management/api/**").hasAuthority(COURSE_WRITE.getPermission())
                 .antMatchers(GET,"/management/api/**").hasAnyRole(ADMIN.name(),ADMIN_TRAINEE.name())
                 .anyRequest()
                 .authenticated()
@@ -50,21 +50,21 @@ public class ApplicationSecurityConfig extends WebSecurityConfigurerAdapter {
                 .builder()
                 .username("anna")
                 .password(passwordEncoder.encode("password"))
-                .roles(STUDENT.name())
+                .authorities(STUDENT.getGrantedAuthorities())
                 .build();
 
         UserDetails lindaUser =User
                 .builder()
                 .username("linda")
                 .password(passwordEncoder.encode("pass"))
-                .roles(ADMIN.name())
+                .authorities(ADMIN.getGrantedAuthorities())
                 .build();
 
         UserDetails tomUser =User
                 .builder()
                 .username("tom")
                 .password(passwordEncoder.encode("pass"))
-                .roles(ADMIN_TRAINEE.name())
+                .authorities(ADMIN_TRAINEE.getGrantedAuthorities())
                 .build();
 
         return new InMemoryUserDetailsManager(annSmith,lindaUser,tomUser);
