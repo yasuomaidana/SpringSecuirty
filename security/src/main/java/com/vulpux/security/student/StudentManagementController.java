@@ -1,12 +1,14 @@
 package com.vulpux.security.student;
 
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.Arrays;
 import java.util.List;
 
 @RestController
-@RequestMapping("management/api/v1/student")
+@RequestMapping("management/api/v1/student") // for only one role use "hasRole"
+@PreAuthorize("hasAnyRole('ADMIN','ADMIN_TRAINEE')")
 public class StudentManagementController {
 
     public static final List<Student> STUDENTS = Arrays.asList(new Student("James Bond", 1),
@@ -29,6 +31,7 @@ public class StudentManagementController {
     }
 
     @PutMapping(path = "{studentId}")
+    @PreAuthorize("hasAuthority('student:write')")
     public void updateStudent(@PathVariable("studentId") Integer studentId, @RequestBody Student student){
         System.out.println(String.format("%s %s",student, studentId));
     }

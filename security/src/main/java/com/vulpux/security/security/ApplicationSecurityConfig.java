@@ -4,6 +4,7 @@ import lombok.AllArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
@@ -14,12 +15,14 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.provisioning.InMemoryUserDetailsManager;
 
 import static com.vulpux.security.security.ApplicationUserPermission.COURSE_WRITE;
+import static com.vulpux.security.security.ApplicationUserPermission.STUDENT_WRITE;
 import static com.vulpux.security.security.ApplicationUserRole.*;
 import static org.springframework.http.HttpMethod.*;
 
 @Configuration
 @EnableWebSecurity
 @AllArgsConstructor
+@EnableGlobalMethodSecurity(prePostEnabled = true)
 public class ApplicationSecurityConfig extends WebSecurityConfigurerAdapter {
     @Autowired
     private final PasswordEncoder passwordEncoder;
@@ -31,10 +34,10 @@ public class ApplicationSecurityConfig extends WebSecurityConfigurerAdapter {
                 //WhiteListing urls
                 .antMatchers("/","index","/css/*","/js/*").permitAll()
                 .antMatchers("/api/**").hasRole(STUDENT.name())
-                .antMatchers(DELETE,"/management/api/**").hasAuthority(COURSE_WRITE.getPermission())
-                .antMatchers(POST,"/management/api/**").hasAuthority(COURSE_WRITE.getPermission())
+                .antMatchers(DELETE,"/management/api/**").hasAnyAuthority(COURSE_WRITE.getPermission(),STUDENT_WRITE.getPermission())
+                //.antMatchers(POST,"/management/api/**").hasAuthority(COURSE_WRITE.getPermission()) covered using annotation
                 .antMatchers(PUT,"/management/api/**").hasAuthority(COURSE_WRITE.getPermission())
-                .antMatchers(GET,"/management/api/**").hasAnyRole(ADMIN.name(),ADMIN_TRAINEE.name())
+                //.antMatchers(GET,"/management/api/**").hasAnyRole(ADMIN.name(),ADMIN_TRAINEE.name()) done using annotation
                 .anyRequest()
                 .authenticated()
                 .and()
