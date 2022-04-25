@@ -1,4 +1,4 @@
-package com.vulpux.security.student;
+package security.student;
 
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;

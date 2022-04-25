@@ -1,4 +1,4 @@
-package com.vulpux.security.student;
+package security.student;
 
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
@@ -9,6 +9,7 @@ import java.util.List;
 @RestController
 @RequestMapping("management/api/v1/student") // for only one role use "hasRole"
 @PreAuthorize("hasAnyRole('ADMIN','ADMIN_TRAINEE')")
+
 public class StudentManagementController {
 
     public static final List<Student> STUDENTS = Arrays.asList(new Student("James Bond", 1),

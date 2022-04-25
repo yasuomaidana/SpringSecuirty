@@ -1,4 +1,4 @@
-package com.vulpux.security.security;
+package security.security;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;

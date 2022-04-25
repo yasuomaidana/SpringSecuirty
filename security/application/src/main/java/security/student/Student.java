@@ -1,4 +1,4 @@
-package com.vulpux.security.student;
+package security.student;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;

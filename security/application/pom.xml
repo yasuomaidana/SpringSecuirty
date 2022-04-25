@@ -8,14 +8,10 @@
         <version>0.0.1-SNAPSHOT</version>
     </parent>
     <modelVersion>4.0.0</modelVersion>
-    <artifactId>processors</artifactId>
+
+    <artifactId>application</artifactId>
     <packaging>jar</packaging>
     <dependencies>
-        <dependency>
-            <groupId>com.vulpux</groupId>
-            <artifactId>application</artifactId>
-            <version>0.0.1-SNAPSHOT</version>
-        </dependency>
         <dependency>
             <groupId>com.vulpux</groupId>
             <artifactId>commons</artifactId>
@@ -23,6 +19,7 @@
             <scope>compile</scope>
         </dependency>
     </dependencies>
+
     <properties>
         <maven.compiler.source>8</maven.compiler.source>
         <maven.compiler.target>8</maven.compiler.target>
