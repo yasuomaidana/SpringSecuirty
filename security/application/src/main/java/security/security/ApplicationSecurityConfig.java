@@ -35,7 +35,7 @@ public class ApplicationSecurityConfig extends WebSecurityConfigurerAdapter {
                 .antMatchers("/","index","/css/*","/js/*").permitAll()
                 .antMatchers("/api/**").hasRole(STUDENT.name())
                 .antMatchers(DELETE,"/management/api/**").hasAnyAuthority(COURSE_WRITE.getPermission(), STUDENT_WRITE.getPermission())
-                //.antMatchers(POST,"/management/api/**").hasAuthority(COURSE_WRITE.getPermission()) covered using annotation
+                .antMatchers(POST,"/management/api/**").hasAuthority(COURSE_WRITE.getPermission()) // covered using annotation
                 .antMatchers(PUT,"/management/api/**").hasAuthority(COURSE_WRITE.getPermission())
                 //.antMatchers(GET,"/management/api/**").hasAnyRole(ADMIN.name(),ADMIN_TRAINEE.name()) done using annotation
                 .anyRequest()

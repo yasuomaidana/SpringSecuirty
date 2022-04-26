@@ -1,4 +1,4 @@
-package com.vulpux.security.security;
+package security.security;
 
 import security.security.ApplicationUserRole;
 

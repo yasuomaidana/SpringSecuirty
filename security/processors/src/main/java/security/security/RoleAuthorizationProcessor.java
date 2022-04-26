@@ -1,4 +1,4 @@
-package com.vulpux.security.security;
+package security.security;
 
 import javax.annotation.processing.AbstractProcessor;
 import javax.annotation.processing.RoundEnvironment;
