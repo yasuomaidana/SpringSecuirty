@@ -18,3 +18,22 @@ To enable debugging using the IntelliJD IDE, you should run
 
 To understand how this runs, check this [link](https://stackoverflow.com/questions/44096708/how-to-debug-spring-boot-application-with-intellij-idea-community-edition)
 
+## Solving packaging problems
+
+if you don't have a main class in springboot project, you can execution spring-boot-maven-plugin by follow
+
+[See the reference](https://stackoverflow.com/a/56535517)
+
+``` xml
+<build>
+    <plugins>
+        <plugin>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-maven-plugin</artifactId>
+            <configuration>
+                <skip>true</skip>
+            </configuration>
+        </plugin>
+    </plugins>
+</build>
+```
