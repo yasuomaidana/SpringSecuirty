@@ -37,3 +37,9 @@ if you don't have a main class in springboot project, you can execution spring-b
     </plugins>
 </build>
 ```
+
+## Solving generating code from annotations 
+
+Read [this](https://stackoverflow.com/questions/31345893/debug-java-annotation-processors-using-intellij-and-maven) stack overflow answer.
+
+Additionally look [blog entry](http://hannesdorfmann.com/annotation-processing/annotationprocessing101/)
