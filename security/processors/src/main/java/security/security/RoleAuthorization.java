@@ -1,7 +1,5 @@
 package security.security;
 
-import security.security.ApplicationUserRole;
-
 import java.lang.annotation.Inherited;
 import java.lang.annotation.Retention;
 import java.lang.annotation.Target;
