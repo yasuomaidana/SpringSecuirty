@@ -43,3 +43,8 @@ if you don't have a main class in springboot project, you can execution spring-b
 Read [this](https://stackoverflow.com/questions/31345893/debug-java-annotation-processors-using-intellij-and-maven) stack overflow answer.
 
 Additionally look [blog entry](http://hannesdorfmann.com/annotation-processing/annotationprocessing101/)
+
+## How to debug a processor
+
+Check this blog [entry](http://blog.jensdriller.com/how-to-debug-a-java-annotation-processor-using-intellij/) 
+here it teaches you how to debug using IntelliJ
