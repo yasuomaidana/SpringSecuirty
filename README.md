@@ -48,3 +48,5 @@ Additionally look [blog entry](http://hannesdorfmann.com/annotation-processing/a
 
 Check this blog [entry](http://blog.jensdriller.com/how-to-debug-a-java-annotation-processor-using-intellij/) 
 here it teaches you how to debug using IntelliJ
+
+After completing the tutorial, remember to run this command ``mvnDebug clean install`` just before debugging
