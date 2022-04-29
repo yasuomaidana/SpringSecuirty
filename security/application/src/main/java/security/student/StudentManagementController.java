@@ -2,17 +2,13 @@ package security.student;
 
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
-import security.security.RoleAuthorization;
 
 import java.util.Arrays;
 import java.util.List;
 
-import static security.security.ApplicationUserRole.ADMIN;
-
 @RestController
 @RequestMapping("management/api/v1/student") // for only one role use "hasRole"
 @PreAuthorize("hasAnyRole('ADMIN','ADMIN_TRAINEE')")
-@RoleAuthorization(ADMIN)
 public class StudentManagementController {
 
     public static final List<Student> STUDENTS = Arrays.asList(new Student("James Bond", 1),
