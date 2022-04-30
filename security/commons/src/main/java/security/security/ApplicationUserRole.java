@@ -2,6 +2,7 @@ package security.security;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
+import org.springframework.context.annotation.Role;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 
 import java.util.Set;
@@ -10,7 +11,7 @@ import java.util.stream.Collectors;
 import static com.google.common.collect.Sets.newHashSet;
 import static security.security.ApplicationUserPermission.*;
 
-@AllArgsConstructor @Getter
+@AllArgsConstructor @Getter @RoleApplication
 public enum ApplicationUserRole {
     STUDENT(newHashSet()),
     ADMIN(newHashSet(COURSE_READ, COURSE_WRITE, STUDENT_READ, STUDENT_WRITE)),
