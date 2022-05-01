@@ -34,21 +34,25 @@ class RoleOrPermission{
         this.name= name;
         this.joiner = joiner;
     }
-    public void addChildren(RoleOrPermission children){
-        this.childrenPermissions.add(children);
+    public void addChildren(String childrenName){
+        this.childrenPermissions.add(new RoleOrPermission(childrenName));
     }
     public ArrayList<String> containedNames(){
         ArrayList<String> names = new ArrayList<>();
         if(childrenPermissions.size()>0){
             names.add(name+"S");
-        } else if (childrenPermissions.size()==0) {
             names.add(name);
-        }else{
             childrenPermissions.stream()
                     .forEach(childrenPermission->childrenPermission
                             .containedNames().stream()
                             .forEach(containedName->names.add(name+joiner+containedName)));
+        } else {
+            names.add(name);
         }
         return names;
+    }
+
+    public RoleOrPermission getChildren(String childrenName){
+        return  this.childrenPermissions.stream().filter(childrenPermission->childrenPermission.name==childrenName).findFirst().orElse(null);
     }
 }
