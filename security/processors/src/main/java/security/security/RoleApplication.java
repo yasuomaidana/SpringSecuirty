@@ -1,2 +1,4 @@
-package security.security;public @interface Role {
+package security.security;
+
+public @interface RoleApplication {
 }
