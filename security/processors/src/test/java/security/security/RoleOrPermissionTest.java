@@ -43,8 +43,21 @@ class RoleOrPermissionTest {
         RoleOrPermission role = new RoleOrPermission(fatherRole);
         role.addChildren("TRAINEE");
         role.addChildren("SUPERVISOR");
+        role.getChildren("SUPERVISOR").addChildren("MARKETING");
         ArrayList<String> roles = role.containedNames();
-        assertEquals(4,roles.size(),"Same length failed");
+        assertEquals(6,roles.size(),"Same length failed");
+    }
+
+    @Test
+    void containedThreeLevel2Names(){
+        String fatherRole = "ADMIN";
+        RoleOrPermission role = new RoleOrPermission(fatherRole);
+        role.addChildren("TRAINEE");
+        role.addChildren("SUPERVISOR");
+        role.getChildren("SUPERVISOR").addChildren("MARKETING");
+        role.getChildren("TRAINEE").addChildren("MARKETING");
+        ArrayList<String> roles = role.containedNames();
+        assertEquals(8,roles.size(),"Same length failed");
     }
 
     @Test
