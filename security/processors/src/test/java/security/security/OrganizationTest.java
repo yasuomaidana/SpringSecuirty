@@ -2,73 +2,31 @@ package security.security;
 
 import org.junit.jupiter.api.Test;
 
-import java.util.ArrayList;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-class RoleOrPermissionTest {
-
-
-    @Test
-    void containedSingleName() {
-        String singleRole = "STUDENT";
-        RoleOrPermission role = new RoleOrPermission(singleRole);
-        ArrayList<String> roleName = role.containedNames();
-        assertEquals(1,roleName.size(),"Same length failed");
-        assertEquals(singleRole,roleName.get(0),"Must have the same name");
-    }
-
-    @Test
-    void containedDoubleLevelName(){
-        String fatherRole = "ADMIN";
-        RoleOrPermission role = new RoleOrPermission(fatherRole);
-        role.addChildren("TRAINEE");
-        ArrayList<String> roles = role.containedNames();
-        assertEquals(3,roles.size(),"Same length failed");
-    }
-
-    @Test
-    void containedDoubleLevelNames(){
-        String fatherRole = "ADMIN";
-        RoleOrPermission role = new RoleOrPermission(fatherRole);
-        role.addChildren("TRAINEE");
-        role.addChildren("SUPERVISOR");
-        ArrayList<String> roles = role.containedNames();
-        assertEquals(4,roles.size(),"Same length failed");
-    }
-
-    @Test
-    void containedThreeLevelNames(){
-        String fatherRole = "ADMIN";
-        RoleOrPermission role = new RoleOrPermission(fatherRole);
-        role.addChildren("TRAINEE");
-        role.addChildren("SUPERVISOR");
-        role.getChildren("SUPERVISOR").addChildren("MARKETING");
-        ArrayList<String> roles = role.containedNames();
-        assertEquals(6,roles.size(),"Same length failed");
-    }
-
-    @Test
-    void containedThreeLevel2Names(){
-        String fatherRole = "ADMIN";
-        RoleOrPermission role = new RoleOrPermission(fatherRole);
-        role.addChildren("TRAINEE");
-        role.addChildren("SUPERVISOR");
-        role.getChildren("SUPERVISOR").addChildren("MARKETING");
-        role.getChildren("TRAINEE").addChildren("MARKETING");
-        ArrayList<String> roles = role.containedNames();
-        assertEquals(8,roles.size(),"Same length failed");
-    }
+class OrganizationTest {
 
     @Test
     void getChildren(){
         String fatherRole = "ADMIN";
-        RoleOrPermission role = new RoleOrPermission(fatherRole);
+        Organization role = new Organization(fatherRole);
         role.addChildren("TRAINEE");
         role.addChildren("SUPERVISOR");
-        RoleOrPermission traineeRole = role.getChildren("TRAINEE");
-        RoleOrPermission nonExisting = role.getChildren("FINDER");
-        assertEquals(traineeRole.name,"TRAINEE","Names doesn't matches");
+        role.buildOrganization();
+        Organization traineeRole = role.getChildren("TRAINEE");
+        Organization nonExisting = role.getChildren("FINDER");
+        assertEquals("TRAINEE",traineeRole.getName(),"Names doesn't matches");
         assertNull(nonExisting,"This shouldn't exist");
+    }
+
+    @Test
+    void buildOrganization() {
+        String fatherRole = "ADMIN";
+        Organization role = new Organization(fatherRole);
+        role.addChildren("TRAINEE");
+        role.addChildren("SUPERVISOR");
+        role.buildOrganization();
+        assertEquals("ADMINS",role.getName(),"NAMES doesn't matches");
     }
 }
