@@ -28,5 +28,18 @@ class OrganizationTest {
         role.addChildren("SUPERVISOR");
         role.buildOrganization();
         assertEquals("ADMINS",role.getName(),"NAMES doesn't matches");
+        assertEquals("'ADMIN','ADMIN_TRAINEE','ADMIN_SUPERVISOR'",role.getSetOfPermission(),"Permissions don't matches");
+    }
+
+    @Test
+    void buildTwoLevelesOrganization() {
+        String fatherRole = "ADMIN";
+        Organization role = new Organization(fatherRole);
+        role.addChildren("TRAINEE");
+        role.addChildren("SUPERVISOR");
+        role.getChildren("TRAINEE").addChildren("MARKETING");
+        role.buildOrganization();
+        assertEquals("ADMINS",role.getName(),"NAMES doesn't matches");
+        assertEquals("'ADMIN','ADMIN_TRAINEE','ADMIN_TRAINEE_MARKETING','ADMIN_SUPERVISOR'",role.getSetOfPermission(),"Permissions don't matches");
     }
 }
