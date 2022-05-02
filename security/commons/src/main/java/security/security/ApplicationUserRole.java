@@ -2,7 +2,6 @@ package security.security;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
-import org.springframework.context.annotation.Role;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 
 import java.util.Set;
