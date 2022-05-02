@@ -34,7 +34,7 @@ class Organization {
     @Getter
     private String setOfPermission;
     @Setter
-    static String joiner;
+    static String joiner ="_";
     private ArrayList<Organization> childrenPermissions =new ArrayList<>();
     Organization(String name){
         this.name = name;
@@ -48,14 +48,17 @@ class Organization {
         this.childrenPermissions.add(0,children);
     }
 
-    private void buildPermissions(){
+    private void buildPermissions(String fatherPath){
         if(childrenPermissions.size()>0){
             setOfPermission ="";
-            childrenPermissions.forEach(children->children.buildPermissions());
+            childrenPermissions.stream().findFirst().ifPresent(masterChild->masterChild.buildPermissions(fatherPath));
+            String childFatherPath = fatherPath+name.substring(0,name.length()-1)+joiner;
+            childrenPermissions.stream().skip(1).forEach(children->children.buildPermissions(childFatherPath));
             childrenPermissions.stream()
                     .forEach(children-> setOfPermission+=children.setOfPermission+",");
+            setOfPermission = setOfPermission.substring(0,setOfPermission.length()-1);
         } else {
-            setOfPermission = String.format("'%s'",name);
+            setOfPermission = String.format("'%s'",fatherPath+name);
         }
     }
 
@@ -77,7 +80,7 @@ class Organization {
 
     public void buildOrganization(){
         prepareOrganization("");
-        buildPermissions();
+        buildPermissions("");
     }
 
     public Organization getChildren(String childrenName){
