@@ -3,26 +3,45 @@ package security.security;
 import lombok.Getter;
 import lombok.Setter;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Objects;
-import java.util.Queue;
+import java.util.*;
 import java.util.stream.Collectors;
 
 public class OrganizationTree {
-    ArrayList<Organization> root = new ArrayList<>();
-    String prefix;
+    private ArrayList<Organization> root = new ArrayList<>();
+    private String prefix;
+    @Setter
+    private String nameSplitter = "_";
     OrganizationTree(String prefix){
         this.prefix=prefix;
     }
     public void add(String permissions) {
-        Queue<String> permissionStack = (Queue<String>) Arrays.stream(permissions.split("_")).collect(Collectors.toList());
+        Queue<String> permissionStack =  Arrays.stream(permissions.split(nameSplitter)).collect(Collectors.toCollection(LinkedList::new));
         String permission = permissionStack.poll();
-        if(root.stream().anyMatch(rootElement->rootElement.getName().equals(permission))){
-
+        Organization organizationRoot = root.stream().filter(organization -> organization.getName().equals(permission)).findFirst().orElse(null);
+        if(organizationRoot!=null){
+            add(permissionStack,organizationRoot);
         }else {
             root.add(new Organization(permission));
+            organizationRoot = root.stream().filter(organization -> organization.getName().equals(permission)).findFirst().orElse(null);
+            add(permissionStack,organizationRoot);
         }
+    }
+
+    private void add(Queue<String> permissionStack,Organization organizationNode){
+        String newPermission = permissionStack.poll();
+        if(newPermission==null) return;
+        Organization newOrganizationNode = organizationNode.getChildren(newPermission);
+        if(newOrganizationNode == null){
+            organizationNode.addChildren(newPermission);
+            add(permissionStack,organizationNode.getChildren(newPermission));
+        } else {
+            add(permissionStack,newOrganizationNode);
+        }
+
+    }
+
+    public void setOrganizationJoiner(String organizationJoiner) {
+        Organization.joiner = organizationJoiner;
     }
 }
 
