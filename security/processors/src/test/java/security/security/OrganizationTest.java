@@ -32,7 +32,7 @@ class OrganizationTest {
     }
 
     @Test
-    void buildTwoLevelesOrganization() {
+    void buildTwoLevelsOrganization() {
         String fatherRole = "ADMIN";
         Organization role = new Organization(fatherRole);
         role.addChildren("TRAINEE");
@@ -41,5 +41,7 @@ class OrganizationTest {
         role.buildOrganization();
         assertEquals("ADMINS",role.getName(),"NAMES doesn't matches");
         assertEquals("'ADMIN','ADMIN_TRAINEE','ADMIN_TRAINEE_MARKETING','ADMIN_SUPERVISOR'",role.getSetOfPermission(),"Permissions don't matches");
+        Organization trainees = role.getChildren("TRAINEES");
+        assertNotNull(trainees,"Trainees should exist");
     }
 }
