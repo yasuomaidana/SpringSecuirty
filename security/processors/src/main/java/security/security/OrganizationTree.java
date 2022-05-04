@@ -27,17 +27,22 @@ public class OrganizationTree {
         }
     }
 
+    public Organization getRoot(String rootName){
+        return root.stream()
+                .filter(rootNode->
+                        rootNode.getName().equals(rootName)||rootNode.getName().equals(rootName+"S"))
+                .findFirst().orElse(null);
+    }
+
     private void add(Queue<String> permissionStack,Organization organizationNode){
         String newPermission = permissionStack.poll();
         if(newPermission==null) return;
         Organization newOrganizationNode = organizationNode.getChildren(newPermission);
         if(newOrganizationNode == null){
             organizationNode.addChildren(newPermission);
-            add(permissionStack,organizationNode.getChildren(newPermission));
-        } else {
-            add(permissionStack,newOrganizationNode);
+            newOrganizationNode = organizationNode.getChildren(newPermission);
         }
-
+        add(permissionStack,newOrganizationNode);
     }
 
     public void build() {
