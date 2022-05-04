@@ -2,8 +2,6 @@ package security.security;
 
 import org.junit.jupiter.api.Test;
 
-import static org.junit.jupiter.api.Assertions.*;
-
 class OrganizationTreeTest {
 
     @Test
@@ -17,6 +15,9 @@ class OrganizationTreeTest {
         organization.add(role1);
         organization.add(role2);
         organization.add(role3);
+
+        organization.build();
+
 
     }
 }
