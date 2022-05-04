@@ -2,6 +2,8 @@ package security.security;
 
 import org.junit.jupiter.api.Test;
 
+import static org.junit.jupiter.api.Assertions.*;
+
 class OrganizationTreeTest {
 
     @Test
@@ -18,6 +20,11 @@ class OrganizationTreeTest {
 
         organization.build();
 
+        assertNotNull(organization.getRoot("STUDENT"),"Student should exist");
+        assertNotNull(organization.getRoot("ADMIN"),"Admin should exist");
+        assertNull(organization.getRoot("PROFESSOR"),"Professor shouldn't exists");
 
+        Organization admins = organization.getRoot("ADMIN");
+        assertEquals(2,admins.getChildrenPermissions().size());
     }
 }
