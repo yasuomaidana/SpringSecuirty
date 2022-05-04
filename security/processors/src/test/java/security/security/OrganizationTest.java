@@ -2,46 +2,29 @@ package security.security;
 
 import org.junit.jupiter.api.Test;
 
-
 import static org.junit.jupiter.api.Assertions.*;
 
 class OrganizationTest {
 
     @Test
-    void getChildren(){
-        String fatherRole = "ADMIN";
-        Organization role = new Organization(fatherRole);
-        role.addChildren("TRAINEE");
-        role.addChildren("SUPERVISOR");
-        role.buildOrganization();
-        Organization traineeRole = role.getChildren("TRAINEE");
-        Organization nonExisting = role.getChildren("FINDER");
-        assertEquals("TRAINEE",traineeRole.getName(),"Names doesn't matches");
-        assertNull(nonExisting,"This shouldn't exist");
-    }
+    void add() {
+        Organization organization = new Organization("R_");
 
-    @Test
-    void buildOrganization() {
-        String fatherRole = "ADMIN";
-        Organization role = new Organization(fatherRole);
-        role.addChildren("TRAINEE");
-        role.addChildren("SUPERVISOR");
-        role.buildOrganization();
-        assertEquals("ADMINS",role.getName(),"NAMES doesn't matches");
-        assertEquals("'ADMIN','ADMIN_TRAINEE','ADMIN_SUPERVISOR'",role.getSetOfPermission(),"Permissions don't matches");
-    }
+        String role1 = "ADMIN_TRAINEE";
+        String role2 = "ADMIN_TRAINEE_MARKETING";
+        String role3 = "STUDENT";
 
-    @Test
-    void buildTwoLevelsOrganization() {
-        String fatherRole = "ADMIN";
-        Organization role = new Organization(fatherRole);
-        role.addChildren("TRAINEE");
-        role.addChildren("SUPERVISOR");
-        role.getChildren("TRAINEE").addChildren("MARKETING");
-        role.buildOrganization();
-        assertEquals("ADMINS",role.getName(),"NAMES doesn't matches");
-        assertEquals("'ADMIN','ADMIN_TRAINEE','ADMIN_TRAINEE_MARKETING','ADMIN_SUPERVISOR'",role.getSetOfPermission(),"Permissions don't matches");
-        Organization trainees = role.getChildren("TRAINEES");
-        assertNotNull(trainees,"Trainees should exist");
+        organization.add(role1);
+        organization.add(role2);
+        organization.add(role3);
+
+        organization.build();
+
+        assertNotNull(organization.getDepartments("STUDENT"),"Student should exist");
+        assertNotNull(organization.getDepartments("ADMIN"),"Admin should exist");
+        assertNull(organization.getDepartments("PROFESSOR"),"Professor shouldn't exists");
+
+        Department admins = organization.getDepartments("ADMIN");
+        assertEquals(2,admins.getChildrenPermissions().size());
     }
 }

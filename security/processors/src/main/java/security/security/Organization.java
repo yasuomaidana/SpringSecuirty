@@ -6,38 +6,38 @@ import lombok.Setter;
 import java.util.*;
 import java.util.stream.Collectors;
 
-public class OrganizationTree {
-    private ArrayList<Organization> root = new ArrayList<>();
-    private String prefix;
+public class Organization {
+    private final ArrayList<Department> departments = new ArrayList<>();
+    private final String prefix;
     @Setter
     private String nameSplitter = "_";
-    OrganizationTree(String prefix){
+    Organization(String prefix){
         this.prefix=prefix;
     }
     public void add(String permissions) {
         Queue<String> permissionStack =  Arrays.stream(permissions.split(nameSplitter)).collect(Collectors.toCollection(LinkedList::new));
         String permission = permissionStack.poll();
-        Organization organizationRoot = root.stream().filter(organization -> organization.getName().equals(permission)).findFirst().orElse(null);
-        if(organizationRoot!=null){
-            add(permissionStack,organizationRoot);
+        Department departmentRoot = departments.stream().filter(organization -> organization.getName().equals(permission)).findFirst().orElse(null);
+        if(departmentRoot!=null){
+            add(permissionStack,departmentRoot);
         }else {
-            root.add(new Organization(permission));
-            organizationRoot = root.stream().filter(organization -> organization.getName().equals(permission)).findFirst().orElse(null);
-            add(permissionStack,organizationRoot);
+            departments.add(new Department(permission));
+            departmentRoot = departments.stream().filter(organization -> organization.getName().equals(permission)).findFirst().orElse(null);
+            add(permissionStack,departmentRoot);
         }
     }
 
-    public Organization getRoot(String rootName){
-        return root.stream()
+    public Department getDepartments(String rootName){
+        return departments.stream()
                 .filter(rootNode->
                         rootNode.getName().equals(rootName)||rootNode.getName().equals(rootName+"S"))
                 .findFirst().orElse(null);
     }
 
-    private void add(Queue<String> permissionStack,Organization organizationNode){
+    private void add(Queue<String> permissionStack, Department organizationNode){
         String newPermission = permissionStack.poll();
         if(newPermission==null) return;
-        Organization newOrganizationNode = organizationNode.getChildren(newPermission);
+        Department newOrganizationNode = organizationNode.getChildren(newPermission);
         if(newOrganizationNode == null){
             organizationNode.addChildren(newPermission);
             newOrganizationNode = organizationNode.getChildren(newPermission);
@@ -46,15 +46,15 @@ public class OrganizationTree {
     }
 
     public void build() {
-        Organization.setPrefix(prefix);
-        root.stream().forEach(organizationNode->organizationNode.buildOrganization());
+        Department.setPrefix(prefix);
+        departments.forEach(Department::buildOrganization);
     }
-    public void setOrganizationJoiner(String organizationJoiner) {
-        Organization.joiner = organizationJoiner;
+    public void setDepartmentJoiner(String organizationJoiner) {
+        Department.joiner = organizationJoiner;
     }
 }
 
-class Organization {
+class Department {
     @Getter
     private String name;
     @Getter
@@ -64,18 +64,18 @@ class Organization {
     @Setter
     static String joiner ="_";
     @Getter
-    private ArrayList<Organization> childrenPermissions =new ArrayList<>();
-    Organization(String name){
+    private final ArrayList<Department> childrenPermissions =new ArrayList<>();
+    Department(String name){
         this.name = name;
     }
     @Setter
     private static String prefix="";
 
     public void addChildren(String childrenName){
-        this.childrenPermissions.add(new Organization(childrenName));
+        this.childrenPermissions.add(new Department(childrenName));
     }
 
-    private void addChildren(Organization children){
+    private void addChildren(Department children){
         this.childrenPermissions.add(0,children);
     }
 
@@ -85,7 +85,7 @@ class Organization {
             childrenPermissions.stream().findFirst().ifPresent(masterChild->masterChild.buildPermissions(fatherPath));
             String childFatherPath = fatherPath+name.substring(0,name.length()-1)+joiner;
             childrenPermissions.stream().skip(1).forEach(children->children.buildPermissions(childFatherPath));
-            childrenPermissions.stream()
+            childrenPermissions
                     .forEach(children-> setOfPermission+=children.setOfPermission+",");
             setOfPermission = setOfPermission.substring(0,setOfPermission.length()-1);
         } else {
@@ -99,9 +99,9 @@ class Organization {
             name = oldName+"S";
             pathName = fatherPath+name;
             String childrenFatherPath = pathName+"_";
-            childrenPermissions.stream()
+            childrenPermissions
                     .forEach(childrenPermission->childrenPermission.prepareOrganization(childrenFatherPath));
-            Organization children = new Organization(oldName);
+            Department children = new Department(oldName);
             children.pathName = childrenFatherPath+oldName;
             addChildren(children);
         } else {
@@ -114,7 +114,7 @@ class Organization {
         buildPermissions("");
     }
 
-    public Organization getChildren(String childrenName){
+    public Department getChildren(String childrenName){
         return  this.childrenPermissions.stream()
                 .filter(childrenPermission->
                         Objects.equals(childrenPermission.name, childrenName))
