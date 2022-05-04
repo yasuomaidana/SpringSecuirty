@@ -40,6 +40,10 @@ public class OrganizationTree {
 
     }
 
+    public void build() {
+        Organization.setPrefix(prefix);
+        root.stream().forEach(organizationNode->organizationNode.buildOrganization());
+    }
     public void setOrganizationJoiner(String organizationJoiner) {
         Organization.joiner = organizationJoiner;
     }
@@ -54,10 +58,13 @@ class Organization {
     private String setOfPermission;
     @Setter
     static String joiner ="_";
+    @Getter
     private ArrayList<Organization> childrenPermissions =new ArrayList<>();
     Organization(String name){
         this.name = name;
     }
+    @Setter
+    private static String prefix="";
 
     public void addChildren(String childrenName){
         this.childrenPermissions.add(new Organization(childrenName));
@@ -98,7 +105,7 @@ class Organization {
     }
 
     public void buildOrganization(){
-        prepareOrganization("");
+        prepareOrganization(prefix);
         buildPermissions("");
     }
 
