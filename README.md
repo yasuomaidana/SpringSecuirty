@@ -50,3 +50,7 @@ Check this blog [entry](http://blog.jensdriller.com/how-to-debug-a-java-annotati
 here it teaches you how to debug using IntelliJ
 
 After completing the tutorial, remember to run this command ``mvnDebug clean install`` just before debugging
+
+## Solving not recognizing generated files
+IntelliJ was marking all subdir of my generated-sources/cxf folder as source roots... So a simple highlight of all folders and un-mark as sources fixes the issue. [Link](https://stackoverflow.com/questions/45143135/intellij-idea-cannot-see-generated-sources-directory)
+![](./Readme/solving_not_recognizing.png)
