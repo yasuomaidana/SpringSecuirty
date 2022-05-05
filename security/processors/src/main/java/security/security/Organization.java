@@ -7,6 +7,7 @@ import java.util.*;
 import java.util.stream.Collectors;
 
 public class Organization {
+    @Getter
     private final ArrayList<Department> departments = new ArrayList<>();
     private final String prefix;
     @Setter
@@ -27,7 +28,7 @@ public class Organization {
         }
     }
 
-    public Department getDepartments(String rootName){
+    public Department getDepartment(String rootName){
         return departments.stream()
                 .filter(rootNode->
                         rootNode.getName().equals(rootName)||rootNode.getName().equals(rootName+"S"))

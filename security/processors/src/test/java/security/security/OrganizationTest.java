@@ -20,11 +20,11 @@ class OrganizationTest {
 
         organization.build();
 
-        assertNotNull(organization.getDepartments("STUDENT"),"Student should exist");
-        assertNotNull(organization.getDepartments("ADMIN"),"Admin should exist");
-        assertNull(organization.getDepartments("PROFESSOR"),"Professor shouldn't exists");
+        assertNotNull(organization.getDepartment("STUDENT"),"Student should exist");
+        assertNotNull(organization.getDepartment("ADMIN"),"Admin should exist");
+        assertNull(organization.getDepartment("PROFESSOR"),"Professor shouldn't exists");
 
-        Department admins = organization.getDepartments("ADMIN");
+        Department admins = organization.getDepartment("ADMIN");
         assertEquals(2,admins.getChildrenPermissions().size());
     }
 }
