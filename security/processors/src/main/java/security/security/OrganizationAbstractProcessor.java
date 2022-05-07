@@ -1,50 +1,24 @@
 package security.security;
 
-import com.google.auto.service.AutoService;
-import lombok.SneakyThrows;
-
-import javax.annotation.processing.*;
-import javax.lang.model.SourceVersion;
+import javax.annotation.processing.AbstractProcessor;
+import javax.annotation.processing.RoundEnvironment;
 import javax.lang.model.element.Element;
-import javax.lang.model.element.PackageElement;
 import javax.lang.model.element.TypeElement;
 import javax.tools.JavaFileObject;
 import java.io.BufferedWriter;
 import java.io.IOException;
 import java.util.Collections;
 import java.util.Set;
-import java.util.stream.Collectors;
 
-@SupportedAnnotationTypes("security.security.RoleApplication")
-@SupportedSourceVersion(SourceVersion.RELEASE_8)
-@AutoService(Processor.class)
-public class RolesGeneratorProcessor extends AbstractProcessor {
-    private Organization organization;
-    @SneakyThrows
-    @Override
-    public boolean process(Set<? extends TypeElement> annotations, RoundEnvironment roundEnv) {
-        organization = new Organization("R_");
-        for(Element annotation: roundEnv.getElementsAnnotatedWith(RoleApplication.class)){
-            PackageElement packageElement = (PackageElement) annotation.getEnclosingElement();
-            String packageName = packageElement.toString();
-            prepareOrganization(annotation);
-            writeAnnotations(packageName);
-        }
-        return true;
-    }
 
-    private void prepareOrganization(Element annotation){
-        for(Element enclosed: annotation.getEnclosedElements()
-                .stream()
-                .filter(enclosedRaw->
-                        enclosedRaw.getKind().name().equals("ENUM_CONSTANT"))
-                .collect(Collectors.toList())){
-            organization.add(enclosed.getSimpleName().toString());
-        }
-        organization.build();
-    }
+public abstract class OrganizationAbstractProcessor extends AbstractProcessor {
+    public Organization organization;
 
-    private String generateSingleAnnotation(Department department,boolean firstTime){
+    public abstract boolean process(Set<? extends TypeElement> annotations, RoundEnvironment roundEnv);
+
+    public abstract void prepareOrganization(Element annotation);
+
+    public String generateSingleAnnotation(Department department,boolean firstTime){
         String blankSpace = String.join("", Collections.nCopies(department.getLevel()-1, "\t"));
         String simpleAnnotation = "";
         simpleAnnotation += blankSpace + "@Inherited\n";
@@ -70,7 +44,7 @@ public class RolesGeneratorProcessor extends AbstractProcessor {
         simpleAnnotation += blankSpace+"}\n";
         return  simpleAnnotation;
     }
-    private String generateAnnotations(String packageName, Department rootDepartment){
+    public String generateAnnotations(String packageName, Department rootDepartment){
         String content ="";
         content+="package ";
         content+=packageName;
@@ -83,7 +57,7 @@ public class RolesGeneratorProcessor extends AbstractProcessor {
         content+=generateSingleAnnotation(rootDepartment,true);
         return content;
     }
-    private void writeAnnotations(String packageName) throws IOException {
+    public void writeAnnotations(String packageName) throws IOException {
         for(Department department: organization.getDepartments()){
             JavaFileObject builderClass = processingEnv.getFiler().createSourceFile(department.getPathName());
             BufferedWriter writer = new BufferedWriter(builderClass.openWriter());
