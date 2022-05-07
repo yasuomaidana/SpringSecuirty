@@ -71,6 +71,8 @@ class Department {
     }
     @Setter
     private static String prefix="";
+    @Getter
+    private int level;
 
     public void addChildren(String childrenName){
         this.childrenPermissions.add(new Department(childrenName));
@@ -80,12 +82,13 @@ class Department {
         this.childrenPermissions.add(0,children);
     }
 
-    private void buildPermissions(String fatherPath){
+    private void buildPermissions(String fatherPath,int level){
+        this.level=level;
         if(childrenPermissions.size()>0){
             setOfPermission ="";
-            childrenPermissions.stream().findFirst().ifPresent(masterChild->masterChild.buildPermissions(fatherPath));
+            childrenPermissions.stream().findFirst().ifPresent(masterChild->masterChild.buildPermissions(fatherPath,this.level+1));
             String childFatherPath = fatherPath+name.substring(0,name.length()-1)+joiner;
-            childrenPermissions.stream().skip(1).forEach(children->children.buildPermissions(childFatherPath));
+            childrenPermissions.stream().skip(1).forEach(children->children.buildPermissions(childFatherPath,this.level+1));
             childrenPermissions
                     .forEach(children-> setOfPermission+=children.setOfPermission+",");
             setOfPermission = setOfPermission.substring(0,setOfPermission.length()-1);
@@ -112,7 +115,7 @@ class Department {
 
     public void buildOrganization(){
         prepareOrganization(prefix);
-        buildPermissions("");
+        buildPermissions("",1);
     }
 
     public Department getChildren(String childrenName){

@@ -40,8 +40,12 @@ class DepartmentTest {
         role.getChildren("TRAINEE").addChildren("MARKETING");
         role.buildOrganization();
         assertEquals("ADMINS",role.getName(),"NAMES doesn't matches");
+        assertEquals(1,role.getLevel());
         assertEquals("'ADMIN','ADMIN_TRAINEE','ADMIN_TRAINEE_MARKETING','ADMIN_SUPERVISOR'",role.getSetOfPermission(),"Permissions don't matches");
         Department trainees = role.getChildren("TRAINEES");
         assertNotNull(trainees,"Trainees should exist");
+        assertEquals(2,trainees.getLevel());
+        Department marketing = trainees.getChildren("MARKETING");
+        assertEquals(3,marketing.getLevel());
     }
 }
