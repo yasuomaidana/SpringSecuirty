@@ -49,6 +49,7 @@
 			<artifactId>guava</artifactId>
 			<version>31.1-jre</version>
 		</dependency>
+		<!--Used for annotation generation-->
 		<dependency>
 			<groupId>com.google.auto.service</groupId>
 			<artifactId>auto-service</artifactId>
@@ -57,7 +58,7 @@
 		<dependency>
 			<groupId>org.powermock</groupId>
 			<artifactId>powermock-module-junit4</artifactId>
-			<version>1.5.6</version>
+			<version>2.0.9</version>
 			<scope>test</scope>
 		</dependency>
 		<dependency>
@@ -70,12 +71,6 @@
 			<groupId>org.junit.jupiter</groupId>
 			<artifactId>junit-jupiter</artifactId>
 			<scope>test</scope>
-		</dependency>
-
-		<dependency>
-			<groupId>org.apache.maven.plugins</groupId>
-			<artifactId>maven-compiler-plugin</artifactId>
-			<version>2.5.1</version>
 		</dependency>
 	</dependencies>
 
