@@ -19,11 +19,11 @@ import java.util.stream.Collectors;
 @SupportedSourceVersion(SourceVersion.RELEASE_8)
 @AutoService(Processor.class)
 public class RolesGeneratorProcessor extends AbstractProcessor {
-    private Organization roleOrganization;
+    private Organization organization;
     @SneakyThrows
     @Override
     public boolean process(Set<? extends TypeElement> annotations, RoundEnvironment roundEnv) {
-        roleOrganization = new Organization("R_");
+        organization = new Organization("R_");
         for(Element annotation: roundEnv.getElementsAnnotatedWith(RoleApplication.class)){
             PackageElement packageElement = (PackageElement) annotation.getEnclosingElement();
             String packageName = packageElement.toString();
@@ -39,9 +39,9 @@ public class RolesGeneratorProcessor extends AbstractProcessor {
                 .filter(enclosedRaw->
                         enclosedRaw.getKind().name().equals("ENUM_CONSTANT"))
                 .collect(Collectors.toList())){
-            roleOrganization.add(enclosed.getSimpleName().toString());
+            organization.add(enclosed.getSimpleName().toString());
         }
-        roleOrganization.build();
+        organization.build();
     }
 
     private String generateSingleAnnotation(Department department,boolean firstTime){
@@ -84,7 +84,7 @@ public class RolesGeneratorProcessor extends AbstractProcessor {
         return content;
     }
     private void writeAnnotations(String packageName) throws IOException {
-        for(Department department: roleOrganization.getDepartments()){
+        for(Department department: organization.getDepartments()){
             JavaFileObject builderClass = processingEnv.getFiler().createSourceFile(department.getPathName());
             BufferedWriter writer = new BufferedWriter(builderClass.openWriter());
             writer.write(generateAnnotations(packageName,department));
