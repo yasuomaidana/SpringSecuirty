@@ -26,9 +26,9 @@ public class RolesGeneratorProcessor extends AbstractProcessor {
         roleOrganization = new Organization("R_");
         for(Element annotation: roundEnv.getElementsAnnotatedWith(RoleApplication.class)){
             PackageElement packageElement = (PackageElement) annotation.getEnclosingElement();
+            String packageName = packageElement.toString();
             prepareOrganization(annotation);
-            roleOrganization.getDepartments().forEach(department ->
-                    generateAnnotations(packageElement.toString(),department));
+            writeAnnotations(packageName);
         }
         return true;
     }
@@ -81,14 +81,14 @@ public class RolesGeneratorProcessor extends AbstractProcessor {
                 "import java.lang.annotation.Retention;\n" +
                 "import java.lang.annotation.RetentionPolicy;\n";
         content+=generateSingleAnnotation(rootDepartment,true);
-        System.out.println(content);
         return content;
     }
-    private void writeAnnotations(String annotations) throws IOException {
-        Department example = roleOrganization.getDepartments().get(0);
-        JavaFileObject builderClass = processingEnv.getFiler().createSourceFile(example.getName());
-        BufferedWriter writer = new BufferedWriter(builderClass.openWriter());
-        writer.write(annotations);
-        writer.close();
+    private void writeAnnotations(String packageName) throws IOException {
+        for(Department department: roleOrganization.getDepartments()){
+            JavaFileObject builderClass = processingEnv.getFiler().createSourceFile(department.getPathName());
+            BufferedWriter writer = new BufferedWriter(builderClass.openWriter());
+            writer.write(generateAnnotations(packageName,department));
+            writer.close();
+        }
     }
 }
