@@ -50,8 +50,17 @@ public class Organization {
         Department.setPrefix(prefix);
         departments.forEach(Department::buildOrganization);
     }
+
+    public void buildPermissions(){
+        build();
+        processPermissions();
+    }
     public void setDepartmentJoiner(String organizationJoiner) {
         Department.joiner = organizationJoiner;
+    }
+
+    private void processPermissions(){
+        departments.forEach(Department::cleanDepartments);
     }
 }
 
