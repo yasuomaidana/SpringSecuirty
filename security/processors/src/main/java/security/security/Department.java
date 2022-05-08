@@ -5,6 +5,7 @@ import lombok.Setter;
 
 import java.util.ArrayList;
 import java.util.Objects;
+import java.util.stream.Collectors;
 
 public class Department {
     @Getter
@@ -16,7 +17,7 @@ public class Department {
     @Setter
     static String joiner = "_";
     @Getter
-    private final ArrayList<Department> childrenPermissions = new ArrayList<>();
+    private ArrayList<Department> childrenPermissions = new ArrayList<>();
 
     Department(String name) {
         this.name = name;
@@ -76,5 +77,25 @@ public class Department {
                 .filter(childrenPermission ->
                         Objects.equals(childrenPermission.name, childrenName))
                 .findFirst().orElse(null);
+    }
+
+    public void cleanDepartments(){
+        childrenPermissions=childrenPermissions.stream().filter(department -> department.getSetOfPermission().contains(joiner))
+                .collect(Collectors.toCollection(ArrayList::new));
+        childrenPermissions.forEach(Department::cleanDepartments);
+        int size = childrenPermissions.size();
+        if(size==1){
+            Department replacement = childrenPermissions.stream().findFirst().get();
+            name = replacement.pathName;
+            pathName = replacement.pathName;
+            setOfPermission = replacement.setOfPermission;
+            childrenPermissions = new ArrayList<>();
+        } else if (size>1) {
+            setOfPermission ="";
+            childrenPermissions.forEach(children->setOfPermission+=children.setOfPermission+",");
+            setOfPermission = setOfPermission.substring(0,setOfPermission.length()-1);
+        }
+        name = name.toUpperCase();
+        pathName = pathName.toUpperCase();
     }
 }
