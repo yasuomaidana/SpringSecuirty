@@ -1,7 +1,11 @@
 package security.security;
 
+import com.google.auto.service.AutoService;
+
 import javax.annotation.processing.AbstractProcessor;
+import javax.annotation.processing.Processor;
 import javax.annotation.processing.RoundEnvironment;
+import javax.annotation.processing.SupportedSourceVersion;
 import javax.lang.model.element.Element;
 import javax.lang.model.element.TypeElement;
 import javax.tools.JavaFileObject;
@@ -10,13 +14,19 @@ import java.io.IOException;
 import java.util.Collections;
 import java.util.Set;
 
+import static javax.lang.model.SourceVersion.RELEASE_8;
 
-public abstract class OrganizationAbstractProcessor extends AbstractProcessor {
+
+@SupportedSourceVersion(RELEASE_8)
+@AutoService(Processor.class)
+public class AnnotationsProcessor extends AbstractProcessor {
     public Organization organization;
 
-    public abstract boolean process(Set<? extends TypeElement> annotations, RoundEnvironment roundEnv);
+    public boolean process(Set<? extends TypeElement> annotations, RoundEnvironment roundEnv){
 
-    public abstract void prepareOrganization(Element annotation);
+        return true;
+    }
+
 
     public String generateSingleAnnotation(Department department,boolean firstTime){
         String blankSpace = String.join("", Collections.nCopies(department.getLevel()-1, "\t"));

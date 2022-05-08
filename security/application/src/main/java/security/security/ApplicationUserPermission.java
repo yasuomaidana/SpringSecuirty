@@ -3,7 +3,7 @@ package security.security;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 
-@AllArgsConstructor @Getter
+@AllArgsConstructor @Getter @PermissionApplication
 public enum ApplicationUserPermission {
     STUDENT_READ("student:read"),
     STUDENT_WRITE("student:write"),
