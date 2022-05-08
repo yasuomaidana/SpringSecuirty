@@ -1,4 +1,4 @@
-package security.security;
+package security.security.annotations;
 
 
 public @interface PermissionApplication {
