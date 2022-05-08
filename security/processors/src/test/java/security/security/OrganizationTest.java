@@ -79,7 +79,15 @@ class OrganizationTest {
         organization.add(permission3);
         organization.buildPermissions();
 
-        Department permission = organization.getDepartments().get(0);
-        permission.getLevel();
+        Department permissions = organization.getDepartments().get(0);
+        assertEquals(1,permissions.getLevel());
+        assertEquals("'student:read','student:write'",permissions.getSetOfPermission());
+        assertEquals(2,permissions.getChildrenPermissions().get(0).getLevel());
+        assertEquals("'student:read'",permissions.getChildrenPermissions().get(0).getSetOfPermission());
+        assertEquals("'student:write'",permissions.getChildrenPermissions().get(1).getSetOfPermission());
+
+        permissions = organization.getDepartments().get(1);
+        assertEquals(1,permissions.getLevel());
+        assertEquals("'admin:write'",permissions.getSetOfPermission());
     }
 }
