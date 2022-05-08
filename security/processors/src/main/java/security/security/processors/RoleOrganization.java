@@ -15,7 +15,7 @@ import java.util.stream.Collectors;
 public class RoleOrganization extends OrganizationProcessor {
 
     public RoleOrganization(Set<? extends TypeElement> annotations, RoundEnvironment roundEnv, ProcessingEnvironment processingEnv){
-        generateOrganization(annotations,roundEnv,processingEnv);
+        super(annotations,roundEnv,processingEnv);
     }
 
     @SneakyThrows
