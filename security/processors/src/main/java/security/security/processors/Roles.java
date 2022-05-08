@@ -12,9 +12,9 @@ import javax.lang.model.element.TypeElement;
 import java.util.Set;
 import java.util.stream.Collectors;
 
-public class RoleOrganization extends OrganizationProcessor {
+public class Roles extends OrganizationProcessor {
 
-    public RoleOrganization(Set<? extends TypeElement> annotations, RoundEnvironment roundEnv, ProcessingEnvironment processingEnv){
+    public Roles(Set<? extends TypeElement> annotations, RoundEnvironment roundEnv, ProcessingEnvironment processingEnv){
         super(annotations,roundEnv,processingEnv);
     }
 

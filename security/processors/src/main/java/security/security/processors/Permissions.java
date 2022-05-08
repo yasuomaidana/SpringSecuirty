@@ -12,7 +12,7 @@ import javax.lang.model.element.TypeElement;
 import java.util.Set;
 
 
-public class PermissionAnnotationProcessor{
+public class Permissions {
 
     Organization organization;
 
