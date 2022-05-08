@@ -12,7 +12,6 @@ public enum ApplicationUserPermission {
     STUDENT_WRITE("student:write"),
     @PermissionApplication("course:read")
     COURSE_READ("course:read"),
-
     @PermissionApplication("course:write")
     COURSE_WRITE("course:write");
 
