@@ -4,6 +4,7 @@ import lombok.SneakyThrows;
 import security.security.Organization;
 import security.security.annotations.RoleApplication;
 
+import javax.annotation.processing.ProcessingEnvironment;
 import javax.annotation.processing.RoundEnvironment;
 import javax.lang.model.element.Element;
 import javax.lang.model.element.PackageElement;
@@ -11,19 +12,21 @@ import javax.lang.model.element.TypeElement;
 import java.util.Set;
 import java.util.stream.Collectors;
 
-public class RoleAnnotationsProcessor {
+public class RoleOrganization extends OrganizationProcessor {
 
-    Organization organization;
+    public RoleOrganization(Set<? extends TypeElement> annotations, RoundEnvironment roundEnv, ProcessingEnvironment processingEnv){
+        generateOrganization(annotations,roundEnv,processingEnv);
+    }
 
     @SneakyThrows
-    public boolean process(Set<? extends TypeElement> annotations, RoundEnvironment roundEnv) {
+    public void generateOrganization(Set<? extends TypeElement> annotations, RoundEnvironment roundEnv, ProcessingEnvironment processingEnv) {
         organization = new Organization("R_");
         for(Element annotation: roundEnv.getElementsAnnotatedWith(RoleApplication.class)){
             PackageElement packageElement = (PackageElement) annotation.getEnclosingElement();
-            String packageName = packageElement.toString();
+            packageName = packageElement.toString();
             prepareOrganization(annotation);
+            writeAnnotations(processingEnv);
         }
-        return true;
     }
 
     public void prepareOrganization(Element annotation) {
