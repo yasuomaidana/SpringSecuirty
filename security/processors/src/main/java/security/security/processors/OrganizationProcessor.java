@@ -17,6 +17,10 @@ public abstract class OrganizationProcessor {
     Organization organization;
     String packageName;
 
+    OrganizationProcessor(Set<? extends TypeElement> annotations, RoundEnvironment roundEnv,ProcessingEnvironment processingEnv){
+        generateOrganization(annotations,roundEnv,processingEnv);
+    }
+
     public abstract void generateOrganization(Set<? extends TypeElement> annotations, RoundEnvironment roundEnv,ProcessingEnvironment processingEnv);
 
     public abstract void prepareOrganization(Element annotation);
