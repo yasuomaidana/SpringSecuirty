@@ -2,6 +2,7 @@ package security.security;
 
 import lombok.Getter;
 import lombok.Setter;
+import org.springframework.util.StringUtils;
 
 import java.util.ArrayList;
 import java.util.Objects;
@@ -79,9 +80,24 @@ public class Department {
                 .findFirst().orElse(null);
     }
 
+    //To refactor in another class
+    private void checkLevel(Department department){
+        if(department.childrenPermissions.size()>0){
+            department.childrenPermissions.forEach(this::checkLevel);
+        }
+        int numberOfJoiners = StringUtils.countOccurrencesOf(department.setOfPermission,joiner);
+        if(numberOfJoiners<department.level-1){
+            department.setOfPermission=null;
+        }
+    }
+
+    private void checkPermissions(){
+        childrenPermissions.forEach(Department::checkPermissions);
+        childrenPermissions = childrenPermissions.stream().filter(department -> department.setOfPermission!=null).collect(Collectors.toCollection(ArrayList::new));
+    }
     public void cleanDepartments(){
-        childrenPermissions=childrenPermissions.stream().filter(department -> department.getSetOfPermission().contains(joiner))
-                .collect(Collectors.toCollection(ArrayList::new));
+        childrenPermissions.forEach(this::checkLevel);
+        checkPermissions();
         childrenPermissions.forEach(Department::cleanDepartments);
         int size = childrenPermissions.size();
         if(size==1){
