@@ -14,9 +14,6 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.provisioning.InMemoryUserDetailsManager;
 
-import static org.springframework.http.HttpMethod.*;
-import static security.security.ApplicationUserPermission.COURSE_WRITE;
-import static security.security.ApplicationUserPermission.STUDENT_WRITE;
 import static security.security.ApplicationUserRole.*;
 
 @Configuration
@@ -34,10 +31,10 @@ public class ApplicationSecurityConfig extends WebSecurityConfigurerAdapter {
                 //WhiteListing urls
                 .antMatchers("/","index","/css/*","/js/*").permitAll()
                 .antMatchers("/api/**").hasRole(STUDENT.name())
-                .antMatchers(DELETE,"/management/api/**").hasAnyAuthority(COURSE_WRITE.getPermission(), STUDENT_WRITE.getPermission())
-                .antMatchers(POST,"/management/api/**").hasAuthority(COURSE_WRITE.getPermission()) // covered using annotation
+                //.antMatchers(DELETE,"/management/api/**").hasAnyAuthority(COURSE_WRITE.getPermission())
+                //.antMatchers(POST,"/management/api/**").hasAuthority(COURSE_WRITE.getPermission())
                 //.antMatchers(PUT,"/management/api/**").hasAuthority(COURSE_WRITE.getPermission())
-                //.antMatchers(GET,"/management/api/**").hasAnyRole(ADMIN.name(),ADMIN_TRAINEE.name()) done using annotation
+                //.antMatchers(GET,"/management/api/**").hasAnyRole(ADMIN.name(),ADMIN_TRAINEE.name())
                 .anyRequest()
                 .authenticated()
                 .and()
