@@ -18,3 +18,39 @@ To enable debugging using the IntelliJD IDE, you should run
 
 To understand how this runs, check this [link](https://stackoverflow.com/questions/44096708/how-to-debug-spring-boot-application-with-intellij-idea-community-edition)
 
+## Solving packaging problems
+
+if you don't have a main class in springboot project, you can execution spring-boot-maven-plugin by follow
+
+[See the reference](https://stackoverflow.com/a/56535517)
+
+``` xml
+<build>
+    <plugins>
+        <plugin>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-maven-plugin</artifactId>
+            <configuration>
+                <skip>true</skip>
+            </configuration>
+        </plugin>
+    </plugins>
+</build>
+```
+
+## Solving generating code from annotations 
+
+Read [this](https://stackoverflow.com/questions/31345893/debug-java-annotation-processors-using-intellij-and-maven) stack overflow answer.
+
+Additionally look [blog entry](http://hannesdorfmann.com/annotation-processing/annotationprocessing101/)
+
+## How to debug a processor
+
+Check this blog [entry](http://blog.jensdriller.com/how-to-debug-a-java-annotation-processor-using-intellij/) 
+here it teaches you how to debug using IntelliJ
+
+After completing the tutorial, remember to run this command ``mvnDebug clean install`` just before debugging
+
+## Solving not recognizing generated files
+IntelliJ was marking all subdir of my generated-sources/cxf folder as source roots... So a simple highlight of all folders and un-mark as sources fixes the issue. [Link](https://stackoverflow.com/questions/45143135/intellij-idea-cannot-see-generated-sources-directory)
+![](./Readme/solving_not_recognizing.png)
