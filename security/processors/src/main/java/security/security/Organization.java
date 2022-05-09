@@ -12,10 +12,15 @@ public class Organization {
     private final String prefix;
     @Setter
     private String nameSplitter = "_";
+    private final HashSet<String> permissions = new HashSet<>();
     public Organization(String prefix){
         this.prefix=prefix;
     }
     public void add(String permissions) {
+        if(this.permissions.contains(permissions)){
+            throw new RuntimeException("Permission duplicated");
+        }
+        this.permissions.add(permissions);
         Queue<String> permissionStack =  Arrays.stream(permissions.split(nameSplitter)).collect(Collectors.toCollection(LinkedList::new));
         String permission = permissionStack.poll();
         Department departmentRoot = departments.stream().filter(organization -> organization.getName().equals(permission)).findFirst().orElse(null);
