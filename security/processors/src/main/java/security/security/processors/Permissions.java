@@ -4,33 +4,55 @@ import lombok.SneakyThrows;
 import security.security.Organization;
 import security.security.annotations.PermissionApplication;
 
+import javax.annotation.processing.ProcessingEnvironment;
 import javax.annotation.processing.RoundEnvironment;
 import javax.lang.model.element.Element;
-import javax.lang.model.element.ElementKind;
 import javax.lang.model.element.PackageElement;
 import javax.lang.model.element.TypeElement;
 import java.util.Set;
 
+import static javax.lang.model.element.ElementKind.PACKAGE;
 
-public class Permissions {
 
-    Organization organization;
+public class Permissions extends OrganizationProcessor{
 
-    @SneakyThrows
-    public boolean process(Set<? extends TypeElement> annotations, RoundEnvironment roundEnv) {
-        organization = new Organization("P_");
-        for(Element annotation: roundEnv.getElementsAnnotatedWith(PermissionApplication.class)){
-            PackageElement packageElement = (PackageElement) annotation.getEnclosingElement();
-            String packageName = packageElement.toString();
-            prepareOrganization(annotation);
-        }
-        return false;
+    public Permissions(Set<? extends TypeElement> annotations, RoundEnvironment roundEnv, ProcessingEnvironment processingEnv) {
+        super(annotations, roundEnv, processingEnv);
     }
 
-    public void prepareOrganization(Element annotation) {
-
-        for(Element enclosed: annotation.getEnclosedElements()){
-            ElementKind type = enclosed.getKind();
+    @SneakyThrows
+    @Override
+    public void generateOrganization(Set<? extends TypeElement> annotations, RoundEnvironment roundEnv, ProcessingEnvironment processingEnv) {
+        organization = new Organization("P_");
+        organization.setNameSplitter(":");
+        organization.setDepartmentJoiner(":");
+        setSingle("hasAuthority");
+        setMultiple("hasAnyAuthority");
+        boolean write = false;
+        for(Element annotation: roundEnv.getElementsAnnotatedWith(PermissionApplication.class)){
+            if(annotation.getEnclosingElement().getKind()==PACKAGE){
+                PackageElement packageElement = (PackageElement) annotation.getEnclosingElement();
+                packageName = packageElement.toString();
+                write = true;
+                continue;
+            }
+            prepareOrganization(annotation);
         }
+        if(write){
+            organization.buildPermissions();
+            writeAnnotations(processingEnv);
+        }
+    }
+
+    @Override
+    public void prepareOrganization(Element annotation) {
+        PermissionApplication rawAnnotation = annotation.getAnnotation(PermissionApplication.class);
+        String permission = rawAnnotation.value();
+        if(!permission.toUpperCase().replace(":","_").equals(annotation.getSimpleName().toString())){
+            throw new RuntimeException(
+                    String.format("Enum name and permission don't matches Enum:%s Permission:%s"
+                            , annotation.getSimpleName().toString(),permission));
+        }
+        organization.add(permission);
     }
 }
