@@ -33,7 +33,7 @@ public class StudentManagementController {
     }
 
     @PutMapping(path = "{studentId}")
-    @PreAuthorize("hasAuthority('student:write')")
+    @P_STUDENTS.P_STUDENTS_WRITE
     public void updateStudent(@PathVariable("studentId") Integer studentId, @RequestBody Student student){
         System.out.println(String.format("%s %s",student, studentId));
     }
