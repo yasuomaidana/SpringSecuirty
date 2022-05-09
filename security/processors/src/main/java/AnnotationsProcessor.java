@@ -1,4 +1,5 @@
 import com.google.auto.service.AutoService;
+import security.security.processors.Permissions;
 import security.security.processors.Roles;
 
 import javax.annotation.processing.*;
@@ -16,6 +17,7 @@ public class AnnotationsProcessor extends AbstractProcessor {
     @Override
     public boolean process(Set<? extends TypeElement> annotations, RoundEnvironment roundEnv){
         Roles roles = new Roles(annotations,roundEnv,processingEnv);
+        Permissions permissions = new Permissions(annotations,roundEnv,processingEnv);
         return true;
     }
 }
