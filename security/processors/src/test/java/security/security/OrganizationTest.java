@@ -38,7 +38,6 @@ class OrganizationTest {
         organization.add(permission1);
         organization.build();
         organization.buildPermissions();
-        organization.getDepartments();
         Department permission = organization.getDepartments().get(0);
         assertEquals("P_STUDENTS_READ",permission.getName());
         assertEquals("'student:read'",permission.getSetOfPermission());
@@ -89,5 +88,98 @@ class OrganizationTest {
         permissions = organization.getDepartments().get(1);
         assertEquals(1,permissions.getLevel());
         assertEquals("'admin:write'",permissions.getSetOfPermission());
+    }
+
+    @Test
+    void addFourPermissionThreeLevelsTwoDifferentDepartments(){
+        Organization organization = new Organization("P_");
+        organization.setNameSplitter(":");
+        organization.setDepartmentJoiner(":");
+
+        String permission1 = "student:read";
+        String permission2 = "student:write";
+        String permission4 = "student:homework:read";
+        String permission3 = "admin:write";
+
+        organization.add(permission1);
+        organization.add(permission2);
+        organization.add(permission3);
+        organization.add(permission4);
+        organization.buildPermissions();
+
+        Department permissions = organization.getDepartments().get(0);
+        assertEquals(1,permissions.getLevel());
+        assertEquals("'student:read','student:write','student:homework:read'",permissions.getSetOfPermission());
+        assertEquals(2,permissions.getChildrenPermissions().get(0).getLevel());
+        assertEquals("'student:read'",permissions.getChildrenPermissions().get(0).getSetOfPermission());
+        assertEquals("'student:write'",permissions.getChildrenPermissions().get(1).getSetOfPermission());
+
+        permissions = organization.getDepartments().get(1);
+        assertEquals(1,permissions.getLevel());
+        assertEquals("'admin:write'",permissions.getSetOfPermission());
+    }
+
+    @Test
+    void addFivePermissionThreeLevelsTwoDifferentDepartments(){
+        Organization organization = new Organization("P_");
+        organization.setNameSplitter(":");
+        organization.setDepartmentJoiner(":");
+
+        String permission1 = "student:read";
+        String permission2 = "student:write";
+        String permission4 = "student:homework:read";
+        String permission5 = "student:homework:write";
+        String permission3 = "admin:write";
+
+        organization.add(permission1);
+        organization.add(permission2);
+        organization.add(permission3);
+        organization.add(permission4);
+        organization.add(permission5);
+        organization.buildPermissions();
+
+        Department permissions = organization.getDepartments().get(0);
+        assertEquals(1,permissions.getLevel());
+        assertEquals("'student:read','student:write','student:homework:read','student:homework:write'",permissions.getSetOfPermission());
+        assertEquals(2,permissions.getChildrenPermissions().get(0).getLevel());
+        assertEquals("'student:read'",permissions.getChildrenPermissions().get(0).getSetOfPermission());
+        assertEquals("'student:write'",permissions.getChildrenPermissions().get(1).getSetOfPermission());
+
+        permissions = organization.getDepartments().get(1);
+        assertEquals(1,permissions.getLevel());
+        assertEquals("'admin:write'",permissions.getSetOfPermission());
+    }
+
+    @Test
+    void addSixPermissionThreeLevelsTwoDifferentDepartments(){
+        Organization organization = new Organization("P_");
+        organization.setNameSplitter(":");
+        organization.setDepartmentJoiner(":");
+
+        String permission1 = "student:read";
+        String permission2 = "student:write";
+        String permission4 = "student:homework:read";
+        String permission5 = "student:homework:write";
+        String permission3 = "admin:write";
+        String permission6 = "admin:read";
+
+        organization.add(permission1);
+        organization.add(permission2);
+        organization.add(permission3);
+        organization.add(permission4);
+        organization.add(permission5);
+        organization.add(permission6);
+        organization.buildPermissions();
+
+        Department permissions = organization.getDepartments().get(0);
+        assertEquals(1,permissions.getLevel());
+        assertEquals("'student:read','student:write','student:homework:read','student:homework:write'",permissions.getSetOfPermission());
+        assertEquals(2,permissions.getChildrenPermissions().get(0).getLevel());
+        assertEquals("'student:read'",permissions.getChildrenPermissions().get(0).getSetOfPermission());
+        assertEquals("'student:write'",permissions.getChildrenPermissions().get(1).getSetOfPermission());
+
+        permissions = organization.getDepartments().get(1);
+        assertEquals(1,permissions.getLevel());
+        assertEquals("'admin:write','admin:read'",permissions.getSetOfPermission());
     }
 }
