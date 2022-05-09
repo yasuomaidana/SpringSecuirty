@@ -1,6 +1,5 @@
 package security.student;
 
-import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import security.security.P_STUDENTS;
 import security.security.R_ADMINS;
@@ -23,11 +22,13 @@ public class StudentManagementController {
     }
 
     @PostMapping
+    @P_STUDENTS.P_STUDENTS_WRITE
     public void registerNewStudent(@RequestBody Student student){
         System.out.println(student);
     }
 
     @DeleteMapping(path = "{studentId}")
+    @P_STUDENTS.P_STUDENTS_WRITE
     public void deleteStudent(@PathVariable("studentId") Integer studentId){
         System.out.println(studentId);
     }
