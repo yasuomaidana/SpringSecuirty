@@ -26,8 +26,6 @@ public class Permissions extends OrganizationProcessor{
         organization = new Organization("P_");
         organization.setNameSplitter(":");
         organization.setDepartmentJoiner(":");
-        setSingle("hasAuthority");
-        setMultiple("hasAnyAuthority");
         boolean write = false;
         for(Element annotation: roundEnv.getElementsAnnotatedWith(PermissionApplication.class)){
             if(annotation.getEnclosingElement().getKind()==PACKAGE){
@@ -40,7 +38,7 @@ public class Permissions extends OrganizationProcessor{
         }
         if(write){
             organization.buildPermissions();
-            writeAnnotations(processingEnv);
+            writeAnnotations(processingEnv,"hasAnyAuthority","hasAuthority");
         }
     }
 

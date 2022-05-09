@@ -1,6 +1,5 @@
 package security.security.processors;
 
-import lombok.Setter;
 import security.security.Department;
 import security.security.Organization;
 
@@ -18,11 +17,6 @@ public abstract class OrganizationProcessor {
     Organization organization;
     String packageName;
 
-    @Setter
-    String single = "hasRole";
-    @Setter
-    String multiple = "hasAnyRole";
-
 
     OrganizationProcessor(Set<? extends TypeElement> annotations, RoundEnvironment roundEnv,ProcessingEnvironment processingEnv){
         generateOrganization(annotations,roundEnv,processingEnv);
@@ -32,7 +26,7 @@ public abstract class OrganizationProcessor {
 
     public abstract void prepareOrganization(Element annotation);
 
-    public String generateSingleAnnotation(Department department, boolean firstTime){
+    public String generateSingleAnnotation(Department department, boolean firstTime, String multiple, String single){
         String blankSpace = String.join("", Collections.nCopies(department.getLevel()-1, "\t"));
         String simpleAnnotation = "";
         simpleAnnotation += blankSpace + "@Inherited\n";
@@ -51,7 +45,7 @@ public abstract class OrganizationProcessor {
         StringBuilder innerAnnotation = new StringBuilder();
         for(Department innerDepartment: department.getChildrenPermissions()){
             innerAnnotation.append("\n");
-            innerAnnotation.append(generateSingleAnnotation(innerDepartment,false));
+            innerAnnotation.append(generateSingleAnnotation(innerDepartment,false, multiple, single));
         }
         simpleAnnotation += innerAnnotation;
         simpleAnnotation += firstTime?"\n":"";
@@ -59,7 +53,7 @@ public abstract class OrganizationProcessor {
         return  simpleAnnotation;
     }
 
-    public String generateAnnotations(String packageName, Department rootDepartment){
+    public String generateAnnotations(String packageName, Department rootDepartment, String multiple, String single){
         String content ="";
         content+="package ";
         content+=packageName;
@@ -69,15 +63,15 @@ public abstract class OrganizationProcessor {
                 "import java.lang.annotation.Inherited;\n" +
                 "import java.lang.annotation.Retention;\n" +
                 "import java.lang.annotation.RetentionPolicy;\n";
-        content+=generateSingleAnnotation(rootDepartment,true);
+        content+=generateSingleAnnotation(rootDepartment,true,multiple,single);
         return content;
     }
 
-    public void writeAnnotations(ProcessingEnvironment processingEnv) throws IOException {
+    public void writeAnnotations(ProcessingEnvironment processingEnv,String multiple,String single) throws IOException {
         for(Department department: organization.getDepartments()){
             JavaFileObject builderClass = processingEnv.getFiler().createSourceFile(department.getPathName());
             BufferedWriter writer = new BufferedWriter(builderClass.openWriter());
-            writer.write(generateAnnotations(packageName,department));
+            writer.write(generateAnnotations(packageName,department,multiple,single));
             writer.close();
         }
     }

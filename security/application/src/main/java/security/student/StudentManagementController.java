@@ -2,6 +2,7 @@ package security.student;
 
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
+import security.security.P_STUDENTS;
 import security.security.R_ADMINS;
 
 import java.util.Arrays;

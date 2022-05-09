@@ -25,7 +25,7 @@ public class Roles extends OrganizationProcessor {
             PackageElement packageElement = (PackageElement) annotation.getEnclosingElement();
             packageName = packageElement.toString();
             prepareOrganization(annotation);
-            writeAnnotations(processingEnv);
+            writeAnnotations(processingEnv,"hasAnyRole","hasRole");
         }
     }
 
