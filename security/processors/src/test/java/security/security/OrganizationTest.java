@@ -36,7 +36,6 @@ class OrganizationTest {
 
         String permission1 = "student:read";
         organization.add(permission1);
-        organization.build();
         organization.buildPermissions();
         Department permission = organization.getDepartments().get(0);
         assertEquals("P_STUDENTS_READ",permission.getName());
