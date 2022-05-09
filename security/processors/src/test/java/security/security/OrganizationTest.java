@@ -182,4 +182,18 @@ class OrganizationTest {
         assertEquals(1,permissions.getLevel());
         assertEquals("'admin:write','admin:read'",permissions.getSetOfPermission());
     }
+
+    @Test()
+    public void expectErrorWhenDuplicatedPermissions(){
+        Organization organization = new Organization("Fail");
+        String duplicated = "DUPLICATED";
+        organization.add(duplicated);
+        String errorMessage = null;
+        try{
+            organization.add(duplicated);
+        }catch (RuntimeException re){
+            errorMessage = re.getMessage();
+        }
+        assertEquals("Permission duplicated",errorMessage);
+    }
 }
