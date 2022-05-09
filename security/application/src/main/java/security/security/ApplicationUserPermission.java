@@ -4,7 +4,7 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import security.security.annotations.PermissionApplication;
 
-@AllArgsConstructor @Getter
+@AllArgsConstructor @Getter @PermissionApplication()
 public enum ApplicationUserPermission {
     @PermissionApplication("student:read")
     STUDENT_READ("student:read"),
