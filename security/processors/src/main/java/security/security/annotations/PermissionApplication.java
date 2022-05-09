@@ -2,5 +2,5 @@ package security.security.annotations;
 
 
 public @interface PermissionApplication {
-    String value();
+    String value() default "";
 }
