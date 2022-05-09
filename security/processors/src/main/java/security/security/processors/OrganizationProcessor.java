@@ -1,5 +1,6 @@
 package security.security.processors;
 
+import lombok.Setter;
 import security.security.Department;
 import security.security.Organization;
 
@@ -17,6 +18,12 @@ public abstract class OrganizationProcessor {
     Organization organization;
     String packageName;
 
+    @Setter
+    String single = "hasRole";
+    @Setter
+    String multiple = "hasAnyRole";
+
+
     OrganizationProcessor(Set<? extends TypeElement> annotations, RoundEnvironment roundEnv,ProcessingEnvironment processingEnv){
         generateOrganization(annotations,roundEnv,processingEnv);
     }
@@ -32,10 +39,10 @@ public abstract class OrganizationProcessor {
         simpleAnnotation += blankSpace + "@Retention(RetentionPolicy.RUNTIME)\n";
         if(department.getChildrenPermissions().size()>1){
             simpleAnnotation += blankSpace +
-                    String.format("@PreAuthorize(\"hasAnyRole(%s)\")\n", department.getSetOfPermission());
+                    String.format("@PreAuthorize(\"%s(%s)\")\n",multiple, department.getSetOfPermission());
         }else{
             simpleAnnotation += blankSpace +
-                    String.format("@PreAuthorize(\"hasRole(%s)\")\n", department.getSetOfPermission());
+                    String.format("@PreAuthorize(\"%s(%s)\")\n",single, department.getSetOfPermission());
         }
 
         simpleAnnotation += firstTime?"public ":blankSpace;
