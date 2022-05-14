@@ -33,12 +33,12 @@ public class ApplicationSecurityConfig extends WebSecurityConfigurerAdapter {
                 .and()
                 .authorizeHttpRequests()
                 //WhiteListing urls
-                .antMatchers("/","index","/css/*","/js/*").permitAll()
+                .antMatchers("/","/index.html","/css/*","/js/*","/login").permitAll()
                 .antMatchers("/api/**").hasRole(STUDENT.name())
                 .anyRequest()
                 .authenticated()
                 .and()
-                .formLogin();
+                .formLogin().loginPage("/login");
 
     }
 
