@@ -20,6 +20,7 @@ export class LoginComponent implements OnInit {
     const loginRequest:loginRequestPayload = {
       username:"linda",password:"pass"
     }
-    this.authService.login(loginRequest).subscribe(ans=>console.log(ans))
+    this.authService.login(loginRequest)
+    .subscribe((ans:any)=>console.log(ans));
   }
 }
