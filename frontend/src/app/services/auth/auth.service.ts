@@ -15,4 +15,8 @@ export class AuthService {
     return this.httpClient.get<any>(environment.backend_host+"/login2",
     {responseType:'text' as 'json'});
   }
+
+  login2(loginRequestPayload:loginRequestPayload):Observable<any>{
+    return this.httpClient.get<any>(environment.backend_host+"/login3");
+  }
 }

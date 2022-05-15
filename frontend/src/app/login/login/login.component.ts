@@ -22,5 +22,6 @@ export class LoginComponent implements OnInit {
     }
     this.authService.login(loginRequest)
     .subscribe((ans:any)=>console.log(ans));
+    this.authService.login2(loginRequest).subscribe(ans=>console.log(ans));
   }
 }
