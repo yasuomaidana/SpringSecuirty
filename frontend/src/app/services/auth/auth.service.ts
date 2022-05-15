@@ -12,5 +12,11 @@ export class AuthService {
 
   constructor(private httpClient:HttpClient,private localStorage:LocalStorageService) { }
 
-
+  login(loginRequestPayload:loginRequestPayload):Observable<boolean>{
+    return this.httpClient.get<any>("environment.backend_host"+"/login")
+    .pipe(map(answer=>{
+      console.log(answer);
+      return true;
+    }));
+  }
 }
