@@ -26,19 +26,19 @@ public class ApplicationSecurityConfig extends WebSecurityConfigurerAdapter {
     private final PasswordEncoder passwordEncoder;
     @Override
     protected void configure(HttpSecurity http) throws Exception {
-        http
+        http.cors().and()
                 .csrf()
-                //.ignoringAntMatchers("/management/api/v1/student/") to ignore specific paths from crsf
+                .ignoringAntMatchers("/login*")// to ignore specific paths from crsf
                 .csrfTokenRepository(CookieCsrfTokenRepository.withHttpOnlyFalse())
                 .and()
                 .authorizeHttpRequests()
                 //WhiteListing urls
-                .antMatchers("/","index","/css/*","/js/*").permitAll()
+                .antMatchers("/","/index.html","/css/*","/js/*","/login*").permitAll()
                 .antMatchers("/api/**").hasRole(STUDENT.name())
                 .anyRequest()
                 .authenticated()
                 .and()
-                .formLogin();
+                .formLogin().loginPage("/login");
 
     }
 
