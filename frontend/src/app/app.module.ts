@@ -7,6 +7,7 @@ import { AppComponent } from './app.component';
 import { LoginComponent } from './login/login/login.component';
 import { HomeComponent } from './home/home/home.component';
 import { NgxLocalStorageModule } from 'ngx-localstorage';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 
 @NgModule({
   declarations: [
@@ -19,7 +20,8 @@ import { NgxLocalStorageModule } from 'ngx-localstorage';
     AppRoutingModule,
     HttpClientModule,
     HttpClientXsrfModule.withOptions({cookieName:"XSRF-TOKEN"}),
-    NgxLocalStorageModule.forRoot()
+    NgxLocalStorageModule.forRoot(),
+    FormsModule,ReactiveFormsModule
   ],
   providers: [],
   bootstrap: [AppComponent]
