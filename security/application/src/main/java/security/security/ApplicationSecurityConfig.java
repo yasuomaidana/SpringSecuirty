@@ -28,7 +28,7 @@ public class ApplicationSecurityConfig extends WebSecurityConfigurerAdapter {
     protected void configure(HttpSecurity http) throws Exception {
         http.cors().and()
                 .csrf()
-                .ignoringAntMatchers("/login*")// to ignore specific paths from crsf
+                .ignoringAntMatchers("/login*")// to ignore specific paths from csrf
                 .csrfTokenRepository(CookieCsrfTokenRepository.withHttpOnlyFalse())
                 .and()
                 .authorizeHttpRequests()
@@ -38,7 +38,9 @@ public class ApplicationSecurityConfig extends WebSecurityConfigurerAdapter {
                 .anyRequest()
                 .authenticated()
                 .and()
-                .formLogin().loginPage("/login");
+                .formLogin().loginPage("/login")
+                    .defaultSuccessUrl("/courses",true)
+                    .failureForwardUrl("/failed");
 
     }
 

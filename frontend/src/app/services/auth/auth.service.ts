@@ -12,7 +12,9 @@ export class AuthService {
   constructor(private httpClient:HttpClient,private localStorage:LocalStorageService) { }
 
   login(loginRequestPayload:loginRequestPayload):Observable<any>{
-    return this.httpClient.post<any>(environment.backend_host+"/login",loginRequestPayload,
+    return this.httpClient.post<any>(environment.backend_host
+      +"/login?username="+loginRequestPayload.username+
+      "&"+"password="+loginRequestPayload.password,
     {responseType:'text' as 'json'});
   }
 

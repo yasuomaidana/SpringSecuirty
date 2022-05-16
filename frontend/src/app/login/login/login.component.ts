@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { FormBuilder } from '@angular/forms';
 import { AuthService } from 'src/app/services/auth/auth.service';
 import { loginRequestPayload } from './payload/login-request.payload';
 
@@ -9,19 +10,23 @@ import { loginRequestPayload } from './payload/login-request.payload';
 })
 export class LoginComponent implements OnInit {
 
-  constructor(private authService:AuthService) { }
+  loginForm = this.formBuilder.group({
+    username:"",
+    password:""
+  })
+
+  constructor(private authService:AuthService, private formBuilder:FormBuilder) { }
 
   ngOnInit(): void {
   }
 
   login(){
-    console.log("Doing login");
 
     const loginRequest:loginRequestPayload = {
-      username:"linda",password:"pass"
+      username:this.loginForm.value["username"],password:this.loginForm.value["password"]
     }
     this.authService.login(loginRequest)
-    .subscribe((ans:any)=>console.log("logging",ans));
+    .subscribe((ans:any)=>console.log("logging",ans),error=>console.log("error",error));
 
     this.authService.testGetMethod().subscribe(ans=>console.log("Testing get method",ans));
   }
