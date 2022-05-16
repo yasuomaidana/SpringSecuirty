@@ -21,6 +21,8 @@ export class LoginComponent implements OnInit {
       username:"linda",password:"pass"
     }
     this.authService.login(loginRequest)
-    .subscribe((ans:any)=>console.log(ans));
+    .subscribe((ans:any)=>console.log("logging",ans));
+
+    this.authService.testGetMethod().subscribe(ans=>console.log("Testing get method",ans));
   }
 }
