@@ -28,7 +28,7 @@ public class ApplicationSecurityConfig extends WebSecurityConfigurerAdapter {
     protected void configure(HttpSecurity http) throws Exception {
         http
                 .csrf()
-                //.ignoringAntMatchers("/management/api/v1/student/") to ignore specific paths from crsf
+                .ignoringAntMatchers("/login*")// to ignore specific paths from crsf
                 .csrfTokenRepository(CookieCsrfTokenRepository.withHttpOnlyFalse())
                 .and()
                 .authorizeHttpRequests()
