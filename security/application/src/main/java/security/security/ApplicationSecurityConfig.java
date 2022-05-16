@@ -40,7 +40,8 @@ public class ApplicationSecurityConfig extends WebSecurityConfigurerAdapter {
                 .and()
                 .formLogin().loginPage("/login")
                     .defaultSuccessUrl("/courses",true)
-                    .failureForwardUrl("/failed");
+                    .and()
+                    .rememberMe();
 
     }
 
