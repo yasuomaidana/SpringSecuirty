@@ -26,7 +26,7 @@ public class ApplicationSecurityConfig extends WebSecurityConfigurerAdapter {
     private final PasswordEncoder passwordEncoder;
     @Override
     protected void configure(HttpSecurity http) throws Exception {
-        http
+        http.cors().and()
                 .csrf()
                 .ignoringAntMatchers("/login*")// to ignore specific paths from crsf
                 .csrfTokenRepository(CookieCsrfTokenRepository.withHttpOnlyFalse())
