@@ -1,2 +1,7 @@
-package security.auth;public class ApplicationUserDAO {
+package security.auth;
+
+import java.util.Optional;
+
+public interface ApplicationUserDAO {
+    Optional<ApplicationUser> selectApplicationUserByName(String username);
 }
