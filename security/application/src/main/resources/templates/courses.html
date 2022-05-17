@@ -3,10 +3,22 @@
 <head>
     <meta charset="UTF-8">
     <title>Courses</title>
+    <link href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-/Y6pD6FV/Vv2HJnA6t+vslU6fwYXjCFtcEpHbNJ0lyAFsXTsjBbfaDjzALeQsN6M" crossorigin="anonymous">
+    <link href="https://getbootstrap.com/docs/4.0/examples/signin/signin.css" rel="stylesheet" crossorigin="anonymous"/>
+    <style>
+    body{
+        background-color:#3e3e3e;
+        color:white;
+    }
+</style>
 </head>
 <body>
   <h1>
-    Courses !
+    Courses !!!
   </h1>
+<p>This is a logged view, it should be only accessible to this through an authentication</p>
+<form class="form-signin" method="post" action="/logout">
+    <button class="btn btn-lg btn-primary btn-block" type="submit">Logout</button>
+</form>
 </body>
 </html>
