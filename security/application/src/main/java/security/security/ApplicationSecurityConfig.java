@@ -14,6 +14,9 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.provisioning.InMemoryUserDetailsManager;
 import org.springframework.security.web.csrf.CookieCsrfTokenRepository;
+import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
+
+import java.util.concurrent.TimeUnit;
 
 import static security.security.ApplicationUserRole.*;
 
@@ -28,21 +31,31 @@ public class ApplicationSecurityConfig extends WebSecurityConfigurerAdapter {
     protected void configure(HttpSecurity http) throws Exception {
         http.cors().and()
                 .csrf()
-                .ignoringAntMatchers("/login*")// to ignore specific paths from csrf
+                .ignoringAntMatchers("/login*","/logout*")// to ignore specific paths from csrf
                 .csrfTokenRepository(CookieCsrfTokenRepository.withHttpOnlyFalse())
                 .and()
                 .authorizeHttpRequests()
                 //WhiteListing urls
-                .antMatchers("/","/index.html","/css/*","/js/*","/login*").permitAll()
+                .antMatchers("/","/index.html","/css/*","/js/*","/login*","/logout").permitAll()
                 .antMatchers("/api/**").hasRole(STUDENT.name())
                 .anyRequest()
                 .authenticated()
                 .and()
                 .formLogin().loginPage("/login")
                     .defaultSuccessUrl("/courses",true)
-                    .and()
-                    .rememberMe();
-
+                .and()
+                .rememberMe()
+                    .tokenValiditySeconds((int) TimeUnit.DAYS.toSeconds(21))
+                    .key("secret_key")
+                .and()
+                .logout()
+                    .logoutUrl("/logout")
+                    .logoutRequestMatcher(new
+                            AntPathRequestMatcher("/logout", "GET"))
+                    .clearAuthentication(true)
+                    .invalidateHttpSession(true)
+                    .deleteCookies("XSRF-TOKEN","remember-me","JSESSIONID")
+                    .logoutSuccessUrl("/login");
     }
 
     //How do you retrieve users from your database, this version is hardcoded
