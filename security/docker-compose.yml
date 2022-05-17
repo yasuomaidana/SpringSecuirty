@@ -1,0 +1,14 @@
+version: '3.1'
+services:
+  mysql:
+    container_name: yasuo_working
+    image: mysql
+    environment:
+      MYSQL_DATABASE: db
+      MYSQL_USER: me
+      MYSQL_PASSWORD: "me"
+      MYSQL_ROOT_PASSWORD: "root"
+    ports:
+      - 33060:33060
+      #Port to use outside: Port inside docker
+      - 3310:3306
