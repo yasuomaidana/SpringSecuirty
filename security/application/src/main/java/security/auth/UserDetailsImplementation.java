@@ -7,21 +7,19 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
-import security.security.ApplicationUserPermission;
-import security.security.ApplicationUserRole;
 
 import java.util.HashSet;
 import java.util.Set;
 
 @Service
 @AllArgsConstructor
-public class ApplicationUserServiceImplementation implements UserDetailsService {
+public class UserDetailsImplementation implements UserDetailsService {
 
-    private final UserRepository applicationUserDAO;
+    private final UserRepository userRepository;
 
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-        User user = applicationUserDAO.findByUsername(username).orElseThrow(()->new UsernameNotFoundException(String.format("User %s not found",username)));
+        User user = this.userRepository.findByUsername(username).orElseThrow(()->new UsernameNotFoundException(String.format("User %s not found",username)));
 
         return ApplicationUser.builder()
                 .username(user.getUsername())
@@ -35,12 +33,10 @@ public class ApplicationUserServiceImplementation implements UserDetailsService 
 
     private Set<? extends GrantedAuthority> getAuthorities(User user){
         Set<SimpleGrantedAuthority> authorities = new HashSet<>();
-        for(ApplicationUserRole role: user.getRoles()){
-            authorities.addAll(role.getGrantedAuthorities());
-        }
-        for(ApplicationUserPermission permission: user.getPermissions()){
-            authorities.add(new SimpleGrantedAuthority(permission.getPermission()));
-        }
+        user.getRoles().forEach(role->authorities.addAll(role.getGrantedAuthorities()));
+        user.getPermissions()
+                .forEach(permission->
+                        authorities.add(new SimpleGrantedAuthority(permission.getPermission())));
         return authorities;
     }
 }
