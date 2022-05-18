@@ -13,9 +13,9 @@ import static security.security.ApplicationUserPermission.*;
 
 @AllArgsConstructor @Getter @RoleApplication
 public enum ApplicationUserRole {
-    STUDENT(newHashSet()),
     ADMIN(newHashSet(COURSE_READ, COURSE_WRITE, STUDENT_READ, STUDENT_WRITE)),
-    ADMIN_TRAINEE(newHashSet(COURSE_READ, STUDENT_READ));
+    ADMIN_TRAINEE(newHashSet(COURSE_READ, STUDENT_READ)),
+    STUDENT(newHashSet());
 
     private final Set<ApplicationUserPermission> permissions;
 
