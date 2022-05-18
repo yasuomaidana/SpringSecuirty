@@ -45,7 +45,7 @@ class RolesConverter implements AttributeConverter<List<ApplicationUserRole>,Str
 
     @Override
     public List<ApplicationUserRole> convertToEntityAttribute(String rolesEncoded) {
-        if(rolesEncoded=="") return new ArrayList<>();
+        if(rolesEncoded.equals("")) return new ArrayList<>();
         return Arrays.stream(rolesEncoded.split(","))
                 .map(Integer::valueOf)
                 .map(role->ApplicationUserRole.values()[role]).collect(Collectors.toList());
@@ -65,7 +65,7 @@ class PermissionsConverter implements AttributeConverter<List<ApplicationUserPer
 
     @Override
     public List<ApplicationUserPermission> convertToEntityAttribute(String permissionsEncoded) {
-        if(permissionsEncoded=="") return new ArrayList<>();
+        if(permissionsEncoded.equals("")) return new ArrayList<>();
         return Arrays.stream(permissionsEncoded.split(","))
                 .map(Integer::valueOf)
                 .map(role->ApplicationUserPermission.values()[role]).collect(Collectors.toList());
