@@ -19,9 +19,12 @@ import security.auth.UserDetailsImplementation;
 import security.auth.UserRepository;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.concurrent.TimeUnit;
 
+import static security.security.ApplicationUserPermission.STUDENT_READ;
+import static security.security.ApplicationUserPermission.STUDENT_WRITE;
 import static security.security.ApplicationUserRole.*;
 
 @Configuration
@@ -89,12 +92,22 @@ public class ApplicationSecurityConfig extends WebSecurityConfigurerAdapter {
                 .authorities(ADMIN_TRAINEE.getGrantedAuthorities())
                 .build();
 
+        if (!userRepository.findByUsername("linda").isPresent()){
+            security.auth.User user = security.auth.User.builder()
+                    .username("linda")
+                    .password(lindaUser.getPassword())
+                    .roles(Arrays.asList(ADMIN,ADMIN_TRAINEE))
+                    .permissions(new ArrayList<>(Arrays.asList(new ApplicationUserPermission[]{STUDENT_READ, STUDENT_WRITE})))
+                    .build();
+            userRepository.save(user);
+        }
+
         if (!userRepository.findByUsername("tom").isPresent()){
             security.auth.User user = security.auth.User.builder()
                     .username("tom")
                     .password(tomUser.getPassword())
                     .roles(Collections.singletonList(ADMIN))
-                    .permissions(new ArrayList<>())
+                    .permissions(new ArrayList<>(Arrays.asList(new ApplicationUserPermission[]{STUDENT_READ, STUDENT_WRITE})))
                     .build();
             userRepository.save(user);
         }
