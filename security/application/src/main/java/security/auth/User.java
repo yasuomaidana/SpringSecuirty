@@ -24,11 +24,17 @@ public class User {
     private String password;
 
 
-    @Convert(converter = RolesConverter.class)
+    @ElementCollection
+    @CollectionTable( name = "user_roles",
+            joinColumns = @JoinColumn( name = "user_id" ) )
+    @Column( name = "roles" )
+    @Enumerated(EnumType.STRING)
+    @Convert( converter = RolesConverter.class )
     private List<ApplicationUserRole> roles;
 
     @Convert(converter = PermissionsConverter.class)
     private List<ApplicationUserPermission> permissions;
+
     private boolean accountNonExpired,accountNonLocked,credentialsNonExpired,enabled;
 }
 
@@ -39,16 +45,15 @@ class RolesConverter implements AttributeConverter<List<ApplicationUserRole>,Str
     public String convertToDatabaseColumn(List<ApplicationUserRole> roles) {
         if(roles.size()==0) return "";
         return roles.stream()
-                .map(rol-> String.valueOf(rol.ordinal()))
+                .map(Enum::name)
                 .collect(Collectors.joining(","));
     }
 
     @Override
     public List<ApplicationUserRole> convertToEntityAttribute(String rolesEncoded) {
-        if(rolesEncoded=="") return new ArrayList<>();
+        if(rolesEncoded.isEmpty()) return new ArrayList<>();
         return Arrays.stream(rolesEncoded.split(","))
-                .map(Integer::valueOf)
-                .map(role->ApplicationUserRole.values()[role]).collect(Collectors.toList());
+                .map(ApplicationUserRole::valueOf).collect(Collectors.toList());
     }
 }
 
@@ -59,15 +64,14 @@ class PermissionsConverter implements AttributeConverter<List<ApplicationUserPer
     public String convertToDatabaseColumn(List<ApplicationUserPermission> permissions) {
         if(permissions.size()==0) return "";
         return permissions.stream()
-                .map(rol-> String.valueOf(rol.ordinal()))
+                .map(Enum::name)
                 .collect(Collectors.joining(","));
     }
 
     @Override
     public List<ApplicationUserPermission> convertToEntityAttribute(String permissionsEncoded) {
-        if(permissionsEncoded=="") return new ArrayList<>();
+        if(permissionsEncoded.isEmpty()) return new ArrayList<>();
         return Arrays.stream(permissionsEncoded.split(","))
-                .map(Integer::valueOf)
-                .map(role->ApplicationUserPermission.values()[role]).collect(Collectors.toList());
+                .map(ApplicationUserPermission::valueOf).collect(Collectors.toList());
     }
 }
