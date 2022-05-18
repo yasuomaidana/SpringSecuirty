@@ -32,6 +32,11 @@ public class User {
     @Convert( converter = RolesConverter.class )
     private List<ApplicationUserRole> roles;
 
+    @ElementCollection
+    @CollectionTable( name = "user_permissions",
+            joinColumns = @JoinColumn( name = "user_id" ) )
+    @Column( name = "permissions" )
+    @Enumerated(EnumType.STRING)
     @Convert(converter = PermissionsConverter.class)
     private List<ApplicationUserPermission> permissions;
 
@@ -39,39 +44,30 @@ public class User {
 }
 
 @Converter
-class RolesConverter implements AttributeConverter<List<ApplicationUserRole>,String>{
+class RolesConverter implements AttributeConverter<List<ApplicationUserRole>,List<String>>{
 
     @Override
-    public String convertToDatabaseColumn(List<ApplicationUserRole> roles) {
-        if(roles.size()==0) return "";
-        return roles.stream()
-                .map(Enum::name)
-                .collect(Collectors.joining(","));
+    public List<String> convertToDatabaseColumn(List<ApplicationUserRole> roles) {
+        return roles.stream().map(Enum::name).collect(Collectors.toList());
     }
 
     @Override
-    public List<ApplicationUserRole> convertToEntityAttribute(String rolesEncoded) {
-        if(rolesEncoded.isEmpty()) return new ArrayList<>();
-        return Arrays.stream(rolesEncoded.split(","))
-                .map(ApplicationUserRole::valueOf).collect(Collectors.toList());
+    public List<ApplicationUserRole> convertToEntityAttribute(List<String> rolesEncoded) {
+
+        return rolesEncoded.stream().map(ApplicationUserRole::valueOf).collect(Collectors.toList());
     }
 }
 
 @Converter
-class PermissionsConverter implements AttributeConverter<List<ApplicationUserPermission>,String>{
+class PermissionsConverter implements AttributeConverter<List<ApplicationUserPermission>,List<String>>{
 
     @Override
-    public String convertToDatabaseColumn(List<ApplicationUserPermission> permissions) {
-        if(permissions.size()==0) return "";
-        return permissions.stream()
-                .map(Enum::name)
-                .collect(Collectors.joining(","));
+    public List<String> convertToDatabaseColumn(List<ApplicationUserPermission> permissions) {
+        return permissions.stream().map(Enum::name).collect(Collectors.toList());
     }
 
     @Override
-    public List<ApplicationUserPermission> convertToEntityAttribute(String permissionsEncoded) {
-        if(permissionsEncoded.isEmpty()) return new ArrayList<>();
-        return Arrays.stream(permissionsEncoded.split(","))
-                .map(ApplicationUserPermission::valueOf).collect(Collectors.toList());
+    public List<ApplicationUserPermission> convertToEntityAttribute(List<String> permissionsEncoded) {
+        return permissionsEncoded.stream().map(ApplicationUserPermission::valueOf).collect(Collectors.toList());
     }
 }
