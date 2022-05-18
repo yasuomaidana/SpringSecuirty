@@ -15,7 +15,11 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.provisioning.InMemoryUserDetailsManager;
 import org.springframework.security.web.csrf.CookieCsrfTokenRepository;
 import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
+import security.auth.UserDetailsImplementation;
+import security.auth.UserRepository;
 
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.concurrent.TimeUnit;
 
 import static security.security.ApplicationUserRole.*;
@@ -27,6 +31,8 @@ import static security.security.ApplicationUserRole.*;
 public class ApplicationSecurityConfig extends WebSecurityConfigurerAdapter {
     @Autowired
     private final PasswordEncoder passwordEncoder;
+    @Autowired
+    private final UserRepository userRepository;
     @Override
     protected void configure(HttpSecurity http) throws Exception {
         http.cors().and()
@@ -83,6 +89,15 @@ public class ApplicationSecurityConfig extends WebSecurityConfigurerAdapter {
                 .authorities(ADMIN_TRAINEE.getGrantedAuthorities())
                 .build();
 
+        if (!userRepository.findByUsername("tom").isPresent()){
+            security.auth.User user = security.auth.User.builder()
+                    .username("tom")
+                    .password(tomUser.getPassword())
+                    .roles(Collections.singletonList(ADMIN))
+                    .permissions(new ArrayList<>())
+                    .build();
+            userRepository.save(user);
+        }
         return new InMemoryUserDetailsManager(annSmith,lindaUser,tomUser);
     }
 }
