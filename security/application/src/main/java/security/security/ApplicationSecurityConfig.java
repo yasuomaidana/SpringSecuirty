@@ -15,8 +15,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.provisioning.InMemoryUserDetailsManager;
 import org.springframework.security.web.csrf.CookieCsrfTokenRepository;
 import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
-import security.auth.UserDetailsImplementation;
-import security.auth.UserRepository;
+import security.repository.UserRepository;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -93,7 +92,7 @@ public class ApplicationSecurityConfig extends WebSecurityConfigurerAdapter {
                 .build();
 
         if (!userRepository.findByUsername("linda").isPresent()){
-            security.auth.User user = security.auth.User.builder()
+            security.models.users.User user = security.models.users.User.builder()
                     .username("linda")
                     .password(lindaUser.getPassword())
                     .roles(Arrays.asList(ADMIN,ADMIN_TRAINEE))
@@ -103,7 +102,7 @@ public class ApplicationSecurityConfig extends WebSecurityConfigurerAdapter {
         }
 
         if (!userRepository.findByUsername("tom").isPresent()){
-            security.auth.User user = security.auth.User.builder()
+            security.models.users.User user = security.models.users.User.builder()
                     .username("tom")
                     .password(tomUser.getPassword())
                     .roles(Collections.singletonList(ADMIN))
