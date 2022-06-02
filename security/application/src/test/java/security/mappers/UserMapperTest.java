@@ -4,7 +4,7 @@ package security.mappers;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
-import org.mockito.Mockito;
+import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import security.dtos.users.CreateUserDto;
@@ -32,7 +32,7 @@ class UserMapperTest {
     @InjectMocks
     private UserMapper mapper;
 
-    //@Mock
+    @Mock
     private PasswordEncoder mockPasswordEncoder;
 
     @BeforeEach
@@ -45,7 +45,6 @@ class UserMapperTest {
                 .username("username")
                 .password("password")
                 .build();
-        mockPasswordEncoder = Mockito.mock(PasswordEncoder.class);
         MockitoAnnotations.openMocks(this);
     }
 
@@ -54,6 +53,14 @@ class UserMapperTest {
         when(mockPasswordEncoder.encode(createUserDto.getPassword())).thenReturn("random password");
         User user = mapper.createUserDtoToUser(createUserDto);
         assertNotSame("Password is different","password",user.getPassword());
+        assertEquals("Usernames match","username",user.getUsername());
+
+        List<ApplicationUserRole> expectedRoles = new ArrayList<>(asList(ADMIN,ADMIN_TRAINEE));
+        assertEquals("Roles match",expectedRoles,user.getRoles());
+
+        List<ApplicationUserPermission> expectedPermissions = new ArrayList<>(asList(STUDENT_READ, STUDENT_WRITE));
+        assertEquals("Permissions match",expectedPermissions,user.getPermissions());
+
     }
 
     @Test
