@@ -1,0 +1,72 @@
+package security.mappers;
+
+
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import org.mockito.InjectMocks;
+import org.mockito.Mockito;
+import org.mockito.MockitoAnnotations;
+import org.springframework.security.crypto.password.PasswordEncoder;
+import security.dtos.users.CreateUserDto;
+import security.models.users.User;
+import security.security.ApplicationUserPermission;
+import security.security.ApplicationUserRole;
+
+import java.util.ArrayList;
+import java.util.List;
+
+import static java.util.Arrays.asList;
+import static org.junit.jupiter.api.Assertions.assertNotSame;
+import static org.powermock.api.mockito.PowerMockito.when;
+import static org.springframework.test.util.AssertionErrors.assertEquals;
+import static security.security.ApplicationUserPermission.STUDENT_READ;
+import static security.security.ApplicationUserPermission.STUDENT_WRITE;
+import static security.security.ApplicationUserRole.ADMIN;
+import static security.security.ApplicationUserRole.ADMIN_TRAINEE;
+
+
+class UserMapperTest {
+
+    private CreateUserDto createUserDto;
+
+    @InjectMocks
+    private UserMapper mapper;
+
+    //@Mock
+    private PasswordEncoder mockPasswordEncoder;
+
+    @BeforeEach
+    public void Setup(){
+
+        mapper = new UserMapperImpl();
+        createUserDto = CreateUserDto.builder()
+                .roles("0,1")
+                .permissions("0,1")
+                .username("username")
+                .password("password")
+                .build();
+        mockPasswordEncoder = Mockito.mock(PasswordEncoder.class);
+        MockitoAnnotations.openMocks(this);
+    }
+
+    @Test
+    void createUserDtoToUser() {
+        when(mockPasswordEncoder.encode(createUserDto.getPassword())).thenReturn("random password");
+        User user = mapper.createUserDtoToUser(createUserDto);
+        assertNotSame("Password is different","password",user.getPassword());
+    }
+
+    @Test
+    void convertToListRole() {
+        List<ApplicationUserRole> roles = mapper.convertToListRole(createUserDto);
+        List<ApplicationUserRole> expectedRoles = new ArrayList<>(asList(ADMIN,ADMIN_TRAINEE));
+        assertEquals("Roles match",expectedRoles,roles);
+    }
+
+    @Test
+    void convertToListPermissions() {
+        List<ApplicationUserPermission> permissions = mapper.convertToListPermissions(createUserDto);
+        List<ApplicationUserPermission> expectedPermissions = new ArrayList<>(asList(STUDENT_READ, STUDENT_WRITE));
+        assertEquals("Permissions match",expectedPermissions,permissions);
+    }
+}
