@@ -1,4 +1,4 @@
-package security.Models.users;
+package security.models.users;
 
 import lombok.*;
 import security.security.ApplicationUserPermission;

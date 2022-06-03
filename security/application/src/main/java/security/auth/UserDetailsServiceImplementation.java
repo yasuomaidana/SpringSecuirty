@@ -8,20 +8,20 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 import security.models.users.User;
-import security.repository.UserRepository;
+import security.services.UserDAOService;
 
 import java.util.HashSet;
 import java.util.Set;
 
 @Service
 @AllArgsConstructor
-public class UserDetailsImplementation implements UserDetailsService {
+public class UserDetailsServiceImplementation implements UserDetailsService {
 
-    private final UserRepository userRepository;
+    private final UserDAOService userDAOService;
 
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-        User user = this.userRepository.findByUsername(username).orElseThrow(()->new UsernameNotFoundException(String.format("User %s not found",username)));
+        User user = userDAOService.getUserByUsername(username);
 
         return ApplicationUser.builder()
                 .username(user.getUsername())
