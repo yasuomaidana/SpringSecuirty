@@ -1,4 +1,4 @@
-package security.security;
+package security.config.security;
 
 import lombok.AllArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,9 +22,7 @@ import java.util.Arrays;
 import java.util.Collections;
 import java.util.concurrent.TimeUnit;
 
-import static security.security.ApplicationUserPermission.STUDENT_READ;
-import static security.security.ApplicationUserPermission.STUDENT_WRITE;
-import static security.security.ApplicationUserRole.*;
+import static security.config.security.ApplicationUserRole.STUDENT;
 
 @Configuration
 @EnableWebSecurity
@@ -81,22 +79,22 @@ public class ApplicationSecurityConfig extends WebSecurityConfigurerAdapter {
                 .builder()
                 .username("linda")
                 .password(passwordEncoder.encode("pass"))
-                .authorities(ADMIN.getGrantedAuthorities())
+                .authorities(ApplicationUserRole.ADMIN.getGrantedAuthorities())
                 .build();
 
         UserDetails tomUser =User
                 .builder()
                 .username("tom")
                 .password(passwordEncoder.encode("pass"))
-                .authorities(ADMIN_TRAINEE.getGrantedAuthorities())
+                .authorities(ApplicationUserRole.ADMIN_TRAINEE.getGrantedAuthorities())
                 .build();
 
         if (!userRepository.findByUsername("linda").isPresent()){
             security.models.users.User user = security.models.users.User.builder()
                     .username("linda")
                     .password(lindaUser.getPassword())
-                    .roles(Arrays.asList(ADMIN,ADMIN_TRAINEE))
-                    .permissions(new ArrayList<>(Arrays.asList(new ApplicationUserPermission[]{STUDENT_READ, STUDENT_WRITE})))
+                    .roles(Arrays.asList(ApplicationUserRole.ADMIN, ApplicationUserRole.ADMIN_TRAINEE))
+                    .permissions(new ArrayList<>(Arrays.asList(new ApplicationUserPermission[]{ApplicationUserPermission.STUDENT_READ, ApplicationUserPermission.STUDENT_WRITE})))
                     .build();
             userRepository.save(user);
         }
@@ -105,8 +103,8 @@ public class ApplicationSecurityConfig extends WebSecurityConfigurerAdapter {
             security.models.users.User user = security.models.users.User.builder()
                     .username("tom")
                     .password(tomUser.getPassword())
-                    .roles(Collections.singletonList(ADMIN))
-                    .permissions(new ArrayList<>(Arrays.asList(new ApplicationUserPermission[]{STUDENT_READ, STUDENT_WRITE})))
+                    .roles(Collections.singletonList(ApplicationUserRole.ADMIN))
+                    .permissions(new ArrayList<>(Arrays.asList(new ApplicationUserPermission[]{ApplicationUserPermission.STUDENT_READ, ApplicationUserPermission.STUDENT_WRITE})))
                     .build();
             userRepository.save(user);
         }

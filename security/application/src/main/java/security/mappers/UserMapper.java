@@ -8,8 +8,8 @@ import security.dtos.users.CreateUserDTO;
 import security.models.users.PermissionsConverter;
 import security.models.users.RolesConverter;
 import security.models.users.User;
-import security.security.ApplicationUserPermission;
-import security.security.ApplicationUserRole;
+import security.config.security.ApplicationUserPermission;
+import security.config.security.ApplicationUserRole;
 
 import java.util.List;
 

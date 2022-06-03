@@ -9,8 +9,8 @@ import org.mockito.MockitoAnnotations;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import security.dtos.users.CreateUserDTO;
 import security.models.users.User;
-import security.security.ApplicationUserPermission;
-import security.security.ApplicationUserRole;
+import security.config.security.ApplicationUserPermission;
+import security.config.security.ApplicationUserRole;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -19,10 +19,10 @@ import static java.util.Arrays.asList;
 import static org.junit.jupiter.api.Assertions.assertNotSame;
 import static org.powermock.api.mockito.PowerMockito.when;
 import static org.springframework.test.util.AssertionErrors.assertEquals;
-import static security.security.ApplicationUserPermission.STUDENT_READ;
-import static security.security.ApplicationUserPermission.STUDENT_WRITE;
-import static security.security.ApplicationUserRole.ADMIN;
-import static security.security.ApplicationUserRole.ADMIN_TRAINEE;
+import static security.config.security.ApplicationUserPermission.STUDENT_READ;
+import static security.config.security.ApplicationUserPermission.STUDENT_WRITE;
+import static security.config.security.ApplicationUserRole.ADMIN;
+import static security.config.security.ApplicationUserRole.ADMIN_TRAINEE;
 
 
 class UserMapperTest {

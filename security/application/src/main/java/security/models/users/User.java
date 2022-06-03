@@ -1,8 +1,8 @@
 package security.models.users;
 
 import lombok.*;
-import security.security.ApplicationUserPermission;
-import security.security.ApplicationUserRole;
+import security.config.security.ApplicationUserPermission;
+import security.config.security.ApplicationUserRole;
 
 import javax.persistence.*;
 import java.util.List;

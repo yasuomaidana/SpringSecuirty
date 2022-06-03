@@ -1,6 +1,6 @@
 package security.models.users;
 
-import security.security.ApplicationUserPermission;
+import security.config.security.ApplicationUserPermission;
 
 import javax.persistence.AttributeConverter;
 import javax.persistence.Converter;

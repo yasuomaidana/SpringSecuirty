@@ -1,4 +1,4 @@
-package security.security;
+package security.config.security;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
