@@ -7,7 +7,7 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 import org.springframework.security.crypto.password.PasswordEncoder;
-import security.dtos.users.CreateUserDto;
+import security.dtos.users.CreateUserDTO;
 import security.models.users.User;
 import security.security.ApplicationUserPermission;
 import security.security.ApplicationUserRole;
@@ -27,7 +27,7 @@ import static security.security.ApplicationUserRole.ADMIN_TRAINEE;
 
 class UserMapperTest {
 
-    private CreateUserDto createUserDto;
+    private CreateUserDTO createUserDto;
 
     @InjectMocks
     private UserMapper mapper;
@@ -39,7 +39,7 @@ class UserMapperTest {
     public void Setup(){
 
         mapper = new UserMapperImpl();
-        createUserDto = CreateUserDto.builder()
+        createUserDto = CreateUserDTO.builder()
                 .roles("0,1")
                 .permissions("0,1")
                 .username("username")
