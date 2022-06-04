@@ -57,4 +57,4 @@ IntelliJ was marking all subdir of my generated-sources/cxf folder as source roo
 
 ## Changing user and username
 To see which git configuration you are using, type this `git config --list` in console
-To change user and email type `git config user.username "<your username>` and `git config user.email "<your mail>"`
+To change user and email type `git config user.name "<your username>` and `git config user.email "<your mail>"`
