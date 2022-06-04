@@ -1,5 +1,5 @@
-# SpringSecuirty
-This is a Spring Security practice repository. It is based on this youtube video https://www.youtube.com/watch?v=her_7pa0vrg&amp;list=WL&amp;index=98&amp;t=1040s
+# SpringSecurity
+This is a Spring Security practice repository. It is based on this YouTube video https://www.youtube.com/watch?v=her_7pa0vrg&amp;list=WL&amp;index=98&amp;t=1040s
 
 ## Changing github credentials
 To set GitHub credentials for first time run
@@ -20,7 +20,7 @@ To understand how this runs, check this [link](https://stackoverflow.com/questio
 
 ## Solving packaging problems
 
-if you don't have a main class in springboot project, you can execution spring-boot-maven-plugin by follow
+If you don't have a main class in spring-boot project, you can execute spring-boot-maven-plugin by follow
 
 [See the reference](https://stackoverflow.com/a/56535517)
 
@@ -42,7 +42,7 @@ if you don't have a main class in springboot project, you can execution spring-b
 
 Read [this](https://stackoverflow.com/questions/31345893/debug-java-annotation-processors-using-intellij-and-maven) stack overflow answer.
 
-Additionally look [blog entry](http://hannesdorfmann.com/annotation-processing/annotationprocessing101/)
+Additionally, look [blog entry](http://hannesdorfmann.com/annotation-processing/annotationprocessing101/)
 
 ## How to debug a processor
 
@@ -54,3 +54,7 @@ After completing the tutorial, remember to run this command ``mvnDebug clean ins
 ## Solving not recognizing generated files
 IntelliJ was marking all subdir of my generated-sources/cxf folder as source roots... So a simple highlight of all folders and un-mark as sources fixes the issue. [Link](https://stackoverflow.com/questions/45143135/intellij-idea-cannot-see-generated-sources-directory)
 ![](./Readme/solving_not_recognizing.png)
+
+## Changing user and username
+To see which git configuration you are using, type this `git config --list` in console
+To change user and email type `git config user.username "<your username>` and `git config user.email "<your mail>"`
