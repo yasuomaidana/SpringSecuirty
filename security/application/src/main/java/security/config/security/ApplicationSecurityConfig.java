@@ -1,25 +1,14 @@
 package security.config.security;
 
 import lombok.AllArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
-import org.springframework.security.core.userdetails.User;
-import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.security.core.userdetails.UserDetailsService;
-import org.springframework.security.crypto.password.PasswordEncoder;
-import org.springframework.security.provisioning.InMemoryUserDetailsManager;
 import org.springframework.security.web.csrf.CookieCsrfTokenRepository;
 import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
-import security.repository.UserRepository;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collections;
 import java.util.concurrent.TimeUnit;
 
 import static security.config.security.ApplicationUserRole.STUDENT;
@@ -29,10 +18,6 @@ import static security.config.security.ApplicationUserRole.STUDENT;
 @AllArgsConstructor
 @EnableGlobalMethodSecurity(prePostEnabled = true)
 public class ApplicationSecurityConfig extends WebSecurityConfigurerAdapter {
-    @Autowired
-    private final PasswordEncoder passwordEncoder;
-    @Autowired
-    private final UserRepository userRepository;
     @Override
     protected void configure(HttpSecurity http) throws Exception {
         http.cors().and()
@@ -64,50 +49,4 @@ public class ApplicationSecurityConfig extends WebSecurityConfigurerAdapter {
                     .logoutSuccessUrl("/login");
     }
 
-    //How do you retrieve users from your database, this version is hardcoded
-    @Override
-    @Bean
-    protected UserDetailsService userDetailsService() {
-        UserDetails annSmith = User
-                .builder()
-                .username("anna")
-                .password(passwordEncoder.encode("password"))
-                .authorities(STUDENT.getGrantedAuthorities())
-                .build();
-
-        UserDetails lindaUser =User
-                .builder()
-                .username("linda")
-                .password(passwordEncoder.encode("pass"))
-                .authorities(ApplicationUserRole.ADMIN.getGrantedAuthorities())
-                .build();
-
-        UserDetails tomUser =User
-                .builder()
-                .username("tom")
-                .password(passwordEncoder.encode("pass"))
-                .authorities(ApplicationUserRole.ADMIN_TRAINEE.getGrantedAuthorities())
-                .build();
-
-        if (!userRepository.findByUsername("linda").isPresent()){
-            security.models.users.User user = security.models.users.User.builder()
-                    .username("linda")
-                    .password(lindaUser.getPassword())
-                    .roles(Arrays.asList(ApplicationUserRole.ADMIN, ApplicationUserRole.ADMIN_TRAINEE))
-                    .permissions(new ArrayList<>(Arrays.asList(new ApplicationUserPermission[]{ApplicationUserPermission.STUDENT_READ, ApplicationUserPermission.STUDENT_WRITE})))
-                    .build();
-            userRepository.save(user);
-        }
-
-        if (!userRepository.findByUsername("tom").isPresent()){
-            security.models.users.User user = security.models.users.User.builder()
-                    .username("tom")
-                    .password(tomUser.getPassword())
-                    .roles(Collections.singletonList(ApplicationUserRole.ADMIN))
-                    .permissions(new ArrayList<>(Arrays.asList(new ApplicationUserPermission[]{ApplicationUserPermission.STUDENT_READ, ApplicationUserPermission.STUDENT_WRITE})))
-                    .build();
-            userRepository.save(user);
-        }
-        return new InMemoryUserDetailsManager(annSmith,lindaUser,tomUser);
-    }
 }
