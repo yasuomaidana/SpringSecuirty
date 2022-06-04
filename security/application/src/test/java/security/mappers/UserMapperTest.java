@@ -14,6 +14,7 @@ import security.config.security.ApplicationUserRole;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
 
 import static java.util.Arrays.asList;
 import static org.junit.jupiter.api.Assertions.assertNotSame;
@@ -65,14 +66,14 @@ class UserMapperTest {
 
     @Test
     void convertToListRole() {
-        List<ApplicationUserRole> roles = mapper.convertToListRole(createUserDto);
+        Set<ApplicationUserRole> roles = mapper.convertToListRole(createUserDto);
         List<ApplicationUserRole> expectedRoles = new ArrayList<>(asList(ADMIN,ADMIN_TRAINEE));
         assertEquals("Roles match",expectedRoles,roles);
     }
 
     @Test
     void convertToListPermissions() {
-        List<ApplicationUserPermission> permissions = mapper.convertToListPermissions(createUserDto);
+        Set<ApplicationUserPermission> permissions = mapper.convertToListPermissions(createUserDto);
         List<ApplicationUserPermission> expectedPermissions = new ArrayList<>(asList(STUDENT_READ, STUDENT_WRITE));
         assertEquals("Permissions match",expectedPermissions,permissions);
     }

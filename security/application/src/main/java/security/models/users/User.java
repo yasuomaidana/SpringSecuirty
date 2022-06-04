@@ -5,7 +5,7 @@ import security.config.security.ApplicationUserPermission;
 import security.config.security.ApplicationUserRole;
 
 import javax.persistence.*;
-import java.util.List;
+import java.util.Set;
 
 import static javax.persistence.GenerationType.AUTO;
 
@@ -15,17 +15,19 @@ public class User {
     @GeneratedValue(strategy = AUTO)
     @Column(nullable = false)
     private Long id;
-    @Column(unique = true)
 
+    @Column(unique = true)
     private String username;
+
     private String password;
 
 
     @Convert(converter = RolesConverter.class)
-    private List<ApplicationUserRole> roles;
+    private Set<ApplicationUserRole> roles;
 
     @Convert(converter = PermissionsConverter.class)
-    private List<ApplicationUserPermission> permissions;
+    private Set<ApplicationUserPermission> permissions;
+
     private boolean accountNonExpired,accountNonLocked,credentialsNonExpired,enabled;
 }
 
