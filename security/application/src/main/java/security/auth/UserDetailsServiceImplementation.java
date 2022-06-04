@@ -1,44 +1,30 @@
 package security.auth;
 
 import lombok.AllArgsConstructor;
-import org.springframework.security.core.GrantedAuthority;
-import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
+import security.mappers.UserMapper;
 import security.models.users.User;
 import security.services.UserDAOService;
-
-import java.util.HashSet;
-import java.util.Set;
 
 @Service
 @AllArgsConstructor
 public class UserDetailsServiceImplementation implements UserDetailsService {
 
     private final UserDAOService userDAOService;
+    private final UserMapper mapper;
 
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-        User user = userDAOService.getUserByUsername(username);
-
-        return ApplicationUser.builder()
-                .username(user.getUsername())
-                .enabled(user.isEnabled())
-                .accountNonLocked(user.isAccountNonLocked())
-                .accountNonExpired(user.isAccountNonExpired())
-                .credentialsNonExpired(user.isCredentialsNonExpired())
-                .authorities(getAuthorities(user))
-                .build();
+        User user = userDAOService.getUserByUsername(username).orElseThrow(()
+                ->new UsernameNotFoundException(String.format("User %s not found",username)));
+        user.setAccountNonExpired(true);
+        user.setAccountNonLocked(true);
+        user.setCredentialsNonExpired(true);
+        user.setEnabled(true);
+        return mapper.userToApplicationUser(user);
     }
 
-    private Set<? extends GrantedAuthority> getAuthorities(User user){
-        Set<SimpleGrantedAuthority> authorities = new HashSet<>();
-        user.getRoles().forEach(role->authorities.addAll(role.getGrantedAuthorities()));
-        user.getPermissions()
-                .forEach(permission->
-                        authorities.add(new SimpleGrantedAuthority(permission.getPermission())));
-        return authorities;
-    }
 }
