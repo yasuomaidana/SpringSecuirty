@@ -1,8 +1,8 @@
 package security.student;
 
 import org.springframework.web.bind.annotation.*;
-import security.security.P_STUDENTS;
-import security.security.R_ADMINS;
+import security.config.security.P_STUDENTS;
+import security.config.security.R_ADMINS;
 
 import java.util.Arrays;
 import java.util.List;
