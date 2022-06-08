@@ -19,12 +19,6 @@
             <scope>compile</scope>
         </dependency>
         <dependency>
-            <groupId>com.vulpux</groupId>
-            <artifactId>processors</artifactId>
-            <version>0.0.1-SNAPSHOT</version>
-            <scope>compile</scope>
-        </dependency>
-        <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-thymeleaf</artifactId>
         </dependency>
@@ -88,6 +82,11 @@
                     <source>1.8</source>
                     <target>1.8</target>
                     <annotationProcessorPaths>
+                        <path>
+                            <groupId>com.vulpux</groupId>
+                            <artifactId>processors</artifactId>
+                            <version>0.0.1-SNAPSHOT</version>
+                        </path>
                         <path>
                             <groupId>org.mapstruct</groupId>
                             <artifactId>mapstruct</artifactId>
