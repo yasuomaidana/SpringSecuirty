@@ -15,7 +15,7 @@ class PermissionsConverter implements AttributeConverter<Set<ApplicationUserPerm
 
     @Override
     public String convertToDatabaseColumn(Set<ApplicationUserPermission> permissions) {
-        if (permissions.size() == 0) return "";
+        if (permissions==null || permissions.size() == 0) return "";
         return permissions.stream()
                 .map(rol -> String.valueOf(rol.ordinal()))
                 .collect(Collectors.joining(","));
