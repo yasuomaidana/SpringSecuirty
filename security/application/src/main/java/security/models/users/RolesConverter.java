@@ -14,7 +14,7 @@ class RolesConverter implements AttributeConverter<Set<ApplicationUserRole>, Str
 
     @Override
     public String convertToDatabaseColumn(Set<ApplicationUserRole> roles) {
-        if (roles.size() == 0) return "";
+        if (roles == null || roles.size() == 0) return "";
         return roles.stream()
                 .map(rol -> String.valueOf(rol.ordinal()))
                 .collect(Collectors.joining(","));
