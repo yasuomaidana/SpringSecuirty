@@ -7,6 +7,7 @@ import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.web.csrf.CookieCsrfTokenRepository;
+import security.jwt.JwtConfig;
 import security.jwt.JwtTokenVerifier;
 import security.jwt.JwtUsernameAndPasswordAuthenticationFilter;
 
@@ -18,6 +19,7 @@ import static security.config.security.ApplicationUserRole.STUDENT;
 @AllArgsConstructor
 @EnableGlobalMethodSecurity(prePostEnabled = true)
 public class ApplicationSecurityConfig extends WebSecurityConfigurerAdapter {
+    private JwtConfig jwtConfig;
     @Override
     protected void configure(HttpSecurity http) throws Exception {
         http.cors().and()
@@ -28,8 +30,8 @@ public class ApplicationSecurityConfig extends WebSecurityConfigurerAdapter {
                 .sessionManagement()
                     .sessionCreationPolicy(STATELESS)
                 .and()
-                .addFilter(new JwtUsernameAndPasswordAuthenticationFilter(authenticationManager()))
-                .addFilterAfter(new JwtTokenVerifier(),JwtUsernameAndPasswordAuthenticationFilter.class)
+                .addFilter(new JwtUsernameAndPasswordAuthenticationFilter(authenticationManager(),jwtConfig))
+                .addFilterAfter(new JwtTokenVerifier(jwtConfig),JwtUsernameAndPasswordAuthenticationFilter.class)
                 .authorizeHttpRequests()
                 //WhiteListing urls
                 .antMatchers("/","/index.html","/css/*","/js/*","/login*","/logout").permitAll()
