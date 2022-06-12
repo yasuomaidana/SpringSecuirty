@@ -13,3 +13,10 @@ spring:
     hibernate:
       ddl-auto: update
     show-sql: true
+application:
+  jwt:
+    secretKey: "secured string using several chars, you should change your secret strategy, but that's for later"
+    tokenPrefix: "Bearer "
+    tokenExpirationAfterDays: 14
+    authoritiesPrefix: "authorities"
+    singleAuthorityPrefix: "authority"
