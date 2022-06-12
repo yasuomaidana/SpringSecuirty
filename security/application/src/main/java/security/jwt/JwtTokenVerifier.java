@@ -31,7 +31,7 @@ public class JwtTokenVerifier extends OncePerRequestFilter {
         if(Strings.isNullOrEmpty(authorizationHeader)||!authorizationHeader.startsWith("Bearer ")){
             filterChain.doFilter(request,response);
         }
-        
+
         String token = authorizationHeader.replace("Bearer ","");
         try{
 
@@ -58,5 +58,7 @@ public class JwtTokenVerifier extends OncePerRequestFilter {
         } catch (JwtException e) {
             throw new IllegalStateException(String.format("Token %s cannot be trusted", token));
         }
+
+        filterChain.doFilter(request,response);
     }
 }
