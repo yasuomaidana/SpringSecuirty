@@ -34,8 +34,7 @@ public class ApplicationSecurityConfig extends WebSecurityConfigurerAdapter {
                 .addFilterAfter(new JwtTokenVerifier(jwtConfig),JwtUsernameAndPasswordAuthenticationFilter.class)
                 .authorizeHttpRequests()
                 //WhiteListing urls
-                .antMatchers("/","/index.html","/css/*","/js/*","/login*","/logout").permitAll()
-                .antMatchers("/api/**").hasRole(STUDENT.name())
+                .antMatchers("/","/index.html","/css/*","/js/*","/login*","/logout","/api/users").permitAll()
                 .anyRequest()
                 .authenticated();
     }
