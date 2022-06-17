@@ -23,11 +23,15 @@ public class UserDaoServiceImplementation implements UserDaoService{
     private final UserRepository userRepository;
     private final RoleRepository roleRepository;
 
+    @Override
     public Optional<User> getUser(String username){
+        log.info("Fetching {} user",username);
         return userRepository.findByUsername(username);
     }
 
+    @Override
     public User saveUser(User user){
+        log.info("Saving {} user",user.getUsername());
         return userRepository.save(user);
     }
 
@@ -37,7 +41,6 @@ public class UserDaoServiceImplementation implements UserDaoService{
             ApplicationUserRole.valueOf(role.getName());
             return roleRepository.save(role);
         } catch (ConstraintViolationException cve){
-
             log.info(String.format("Trying to save duplicated role %s",role.getName()));
             Throwable cause = cve.getCause();
             String constraintName = cve.getConstraintName();
@@ -47,12 +50,15 @@ public class UserDaoServiceImplementation implements UserDaoService{
         } catch (IllegalArgumentException iae){
             log.error(String.format("Trying to save non-existing role %s",role.getName()));
             throw iae;
+        }finally {
+            log.info("Saving {} role",role.getName());
         }
         return role;
     }
 
     @Override
     public void addRoleToUser(String username, String roleName) {
+        log.info("Adding {} role to {} user",roleName,username);
         User user = userRepository.findByUsername(username)
                 .orElseThrow(()->new RuntimeException(String.format("User %s doesn't exists",username)));
         Role role = roleRepository.findByName(roleName);
@@ -62,8 +68,8 @@ public class UserDaoServiceImplementation implements UserDaoService{
 
     @Override
     public List<User> getUsers() {
-        Pageable first5Users = PageRequest.of(0,5);
-        return userRepository.findAll(first5Users).getContent();
+        log.info("Getting all users");
+        return userRepository.findAll();
     }
 
     public List<User> getUsersByPage(int page){
