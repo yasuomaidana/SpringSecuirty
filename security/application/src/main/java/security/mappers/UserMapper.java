@@ -8,8 +8,6 @@ import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import security.auth.UserDetailsImplementation;
 import security.dtos.users.CreateUserDTO;
-import security.models.users.PermissionsConverter;
-import security.models.users.RolesConverter;
 import security.models.users.User;
 
 import java.util.HashSet;
@@ -17,8 +15,6 @@ import java.util.Set;
 
 @Mapper(componentModel = "spring")
 public abstract class UserMapper {
-    RolesConverter rolesConverter = new RolesConverter();
-    PermissionsConverter permissionsConverter = new PermissionsConverter();
     @Autowired
     private PasswordEncoder passwordEncoder;
     @Mapping(target="password", expression = "java(encodePassword(userDto))")
@@ -36,12 +32,14 @@ public abstract class UserMapper {
 
     public Set<? extends GrantedAuthority> getAuthoritiesFromUser(User user){
         Set<SimpleGrantedAuthority> authorities = new HashSet<>();
-        if(user.getRoles()!=null)
-        user.getRoles().forEach(role->authorities.addAll(role.getGrantedAuthorities()));
-        if(user.getPermissions()!=null)
-        user.getPermissions()
-                .forEach(permission->
-                        authorities.add(new SimpleGrantedAuthority(permission.getPermission())));
+        if(user.getRoles()!=null) {
+            user.getRoles().forEach(role -> authorities.addAll(role.getGrantedAuthorities()));
+        }
+        if(user.getPermissions()!=null) {
+            user.getPermissions()
+                    .forEach(permission ->
+                            authorities.add(new SimpleGrantedAuthority(permission.getPermission())));
+        }
         return authorities;
     }
 }
