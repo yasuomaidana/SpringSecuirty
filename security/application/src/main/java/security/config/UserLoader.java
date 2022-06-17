@@ -1,5 +1,6 @@
 package security.config;
 
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.context.event.ApplicationReadyEvent;
 import org.springframework.context.ApplicationListener;
@@ -17,12 +18,12 @@ import static security.config.security.ApplicationUserPermission.STUDENT_READ;
 import static security.config.security.ApplicationUserPermission.STUDENT_WRITE;
 import static security.config.security.ApplicationUserRole.*;
 
-@Component
+@Component @RequiredArgsConstructor
 public class UserLoader implements ApplicationListener<ApplicationReadyEvent> {
     @Autowired
-    private UserDaoServiceImplementation userDAOServiceImplementation;
+    private final UserDaoServiceImplementation userDAOServiceImplementation;
     @Autowired
-    private UserMapper userMapper;
+    private final UserMapper userMapper;
     @Override
     public void onApplicationEvent(ApplicationReadyEvent event) {
         CreateUserDTO newUser;
