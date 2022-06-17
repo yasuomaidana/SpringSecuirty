@@ -1,4 +1,4 @@
-package security.student;
+package security.controller.studentcontroller;
 
 import org.springframework.web.bind.annotation.*;
 import security.config.security.P_STUDENTS;
