@@ -9,7 +9,7 @@ import org.springframework.security.core.userdetails.UserDetails;
 import java.util.Set;
 
 @Builder @Getter @AllArgsConstructor
-public class ApplicationUser implements UserDetails {
+public class UserDetailsImplementation implements UserDetails {
 
     private final Set<? extends GrantedAuthority> authorities;
     private final String password;
