@@ -1,4 +1,4 @@
-package security.student;
+package security.controller.studentcontroller;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;

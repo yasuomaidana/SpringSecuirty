@@ -1,4 +1,4 @@
-# SpringSecurity
+# SpringSecurity part 1
 This is a Spring Security practice repository. It is based on this YouTube video https://www.youtube.com/watch?v=her_7pa0vrg&amp;list=WL&amp;index=98&amp;t=1040s
 
 ## Changing github credentials
@@ -58,3 +58,8 @@ IntelliJ was marking all subdir of my generated-sources/cxf folder as source roo
 ## Changing user and username
 To see which git configuration you are using, type this `git config --list` in console
 To change user and email type `git config user.name "<your username>` and `git config user.email "<your mail>"`
+
+
+# SpringSecurity part 2
+
+This part is based on this [YouTube video](https://www.youtube.com/watch?v=VVn9OG9nfH0&list=WL&index=90)

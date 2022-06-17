@@ -7,24 +7,21 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 import security.mappers.UserMapper;
 import security.models.users.User;
-import security.services.UserDAOService;
+import security.services.user.UserDaoServiceImplementation;
 
 @Service
 @AllArgsConstructor
 public class UserDetailsServiceImplementation implements UserDetailsService {
 
-    private final UserDAOService userDAOService;
+    private final UserDaoServiceImplementation userDAOServiceImplementation;
     private final UserMapper mapper;
 
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-        User user = userDAOService.getUserByUsername(username).orElseThrow(()
+        User user = userDAOServiceImplementation.getUser(username).orElseThrow(()
                 ->new UsernameNotFoundException(String.format("User %s not found",username)));
-        user.setAccountNonExpired(true);
-        user.setAccountNonLocked(true);
-        user.setCredentialsNonExpired(true);
-        user.setEnabled(true);
-        return mapper.userToApplicationUser(user);
+
+        return mapper.userToApplicationUser(user,true,true,true,true);
     }
 
 }
