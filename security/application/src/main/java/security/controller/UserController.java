@@ -8,13 +8,15 @@ import org.springframework.web.bind.annotation.RestController;
 import security.models.users.User;
 import security.services.user.UserDaoService;
 
+import javax.annotation.security.PermitAll;
 import java.util.List;
 
 import static org.springframework.http.ResponseEntity.ok;
 
 @RestController
-@RequestMapping("/api")
+@RequestMapping("api")
 @RequiredArgsConstructor
+@PermitAll
 public class UserController {
     private final UserDaoService userDaoService;
 
