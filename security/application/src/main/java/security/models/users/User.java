@@ -25,10 +25,10 @@ public class User {
     private String password;
 
     @ManyToMany(fetch = FetchType.EAGER)
-    private Collection<Role> roles = new HashSet<>();
+    private Set<Role> roles = new HashSet<>();
 
-    @Convert(converter = PermissionsConverter.class)
-    private Set<ApplicationUserPermission> permissions;
+    @ManyToMany(fetch = FetchType.EAGER)
+    private Set<Permission> permissions;
 
     public Set<ApplicationUserRole> getRoles(){
         return roles.stream()
@@ -36,8 +36,18 @@ public class User {
                         .valueOf(rawRole.getName())).collect(Collectors.toSet());
     }
 
+    public Set<ApplicationUserPermission> getPermissions(){
+        return permissions.stream()
+                .map(rawRole->ApplicationUserPermission
+                        .valueOf(rawRole.getName())).collect(Collectors.toSet());
+    }
+
     public Collection<Role> getRolesRaw(){
         return roles;
+    }
+
+    public Collection<Permission> getPermissionsRaw(){
+        return permissions;
     }
 }
 
