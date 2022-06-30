@@ -1,11 +1,15 @@
 package security.models.users;
 
-import lombok.*;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Data;
+import lombok.NoArgsConstructor;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import security.config.security.ApplicationUserPermission;
 import security.config.security.ApplicationUserRole;
 
 import javax.persistence.*;
-import java.util.Collection;
 import java.util.HashSet;
 import java.util.Set;
 import java.util.stream.Collectors;
@@ -28,7 +32,7 @@ public class User {
     private Set<Role> roles = new HashSet<>();
 
     @ManyToMany(fetch = FetchType.EAGER)
-    private Set<Permission> permissions;
+    private Set<Permission> permissions = new HashSet<>();;
 
     public Set<ApplicationUserRole> getRoles(){
         return roles.stream()
@@ -42,12 +46,24 @@ public class User {
                         .valueOf(rawRole.getName())).collect(Collectors.toSet());
     }
 
-    public Collection<Role> getRolesRaw(){
+    public Set<Role> getRolesRaw(){
         return roles;
     }
 
-    public Collection<Permission> getPermissionsRaw(){
+    public Set<Permission> getPermissionsRaw(){
         return permissions;
+    }
+
+    public Set<? extends GrantedAuthority> getAuthorities(){
+        Set<SimpleGrantedAuthority> authorities = new HashSet<>();
+
+        getRoles().forEach(role -> authorities.addAll(role.getGrantedAuthorities()));
+
+        getPermissions()
+                    .forEach(permission ->
+                            authorities.add(new SimpleGrantedAuthority(permission.getPermission())));
+
+        return authorities;
     }
 }
 
