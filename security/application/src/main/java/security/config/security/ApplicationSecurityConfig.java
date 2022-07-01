@@ -12,7 +12,6 @@ import security.jwt.JwtTokenVerifier;
 import security.jwt.JwtUsernameAndPasswordAuthenticationFilter;
 
 import static org.springframework.security.config.http.SessionCreationPolicy.STATELESS;
-import static security.config.security.ApplicationUserRole.STUDENT;
 
 @Configuration
 @EnableWebSecurity
@@ -23,8 +22,8 @@ public class ApplicationSecurityConfig extends WebSecurityConfigurerAdapter {
     @Override
     protected void configure(HttpSecurity http) throws Exception {
         http.cors().and()
-                .csrf()
-                    .ignoringAntMatchers("/login*","/logout*")// to ignore specific paths from csrf
+                .csrf()//.disable()
+                    .ignoringAntMatchers("/login*","/logout*","/api/users/**")// to ignore specific paths from csrf
                     .csrfTokenRepository(CookieCsrfTokenRepository.withHttpOnlyFalse())
                 .and()
                 .sessionManagement()
@@ -34,7 +33,7 @@ public class ApplicationSecurityConfig extends WebSecurityConfigurerAdapter {
                 .addFilterAfter(new JwtTokenVerifier(jwtConfig),JwtUsernameAndPasswordAuthenticationFilter.class)
                 .authorizeHttpRequests()
                 //WhiteListing urls
-                .antMatchers("/","/index.html","/css/*","/js/*","/login*","/logout","/api/users").permitAll()
+                .antMatchers("/","/index.html","/css/*","/js/*","/login*","/logout","/api/users/*").permitAll()
                 .anyRequest()
                 .authenticated();
     }
