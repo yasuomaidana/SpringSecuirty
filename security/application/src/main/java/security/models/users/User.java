@@ -35,12 +35,14 @@ public class User {
     private Set<Permission> permissions = new HashSet<>();;
 
     public Set<ApplicationUserRole> getRoles(){
+        if(roles == null) return new HashSet<>();
         return roles.stream()
                 .map(rawRole->ApplicationUserRole
                         .valueOf(rawRole.getName())).collect(Collectors.toSet());
     }
 
     public Set<ApplicationUserPermission> getPermissions(){
+        if(permissions == null) return new HashSet<>();
         return permissions.stream()
                 .map(rawRole->ApplicationUserPermission
                         .valueOf(rawRole.getName())).collect(Collectors.toSet());
