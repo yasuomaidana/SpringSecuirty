@@ -2,7 +2,6 @@ package security.controller;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
-import org.springframework.transaction.UnexpectedRollbackException;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 import security.dtos.users.CreateUserDTO;
@@ -44,7 +43,11 @@ public class UserController {
     @PostMapping("/role/save")
     public ResponseEntity<Role> saveRole(@RequestBody Role role){
         URI uri = URI.create(ServletUriComponentsBuilder.fromCurrentContextPath().path("api/role/save").toUriString());
-        return ResponseEntity.created(uri).body(userDaoService.saveRole(role));
+        try {
+            return ResponseEntity.created(uri).body(userDaoService.saveRole(role));
+        }catch (RuntimeException re){
+            return ResponseEntity.created(uri).body(role);
+        }
     }
 
 }
