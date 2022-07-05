@@ -3,8 +3,8 @@ package security.models.users;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import org.checkerframework.common.aliasing.qual.Unique;
 
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
@@ -19,6 +19,6 @@ public class Role {
     @Id
     @GeneratedValue(strategy = AUTO)
     private Long id;
-    @Unique
+    @Column(unique = true)
     private String name;
 }
