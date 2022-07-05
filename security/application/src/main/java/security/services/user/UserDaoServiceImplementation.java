@@ -3,10 +3,13 @@ package security.services.user;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.hibernate.exception.ConstraintViolationException;
+import org.springframework.dao.DataIntegrityViolationException;
+import org.springframework.dao.DuplicateKeyException;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.UnexpectedRollbackException;
 import security.config.security.ApplicationUserPermission;
 import security.config.security.ApplicationUserRole;
 import security.models.users.Permission;
@@ -17,8 +20,12 @@ import security.repository.RoleRepository;
 import security.repository.UserRepository;
 
 import javax.transaction.Transactional;
+import java.sql.SQLException;
+import java.sql.SQLIntegrityConstraintViolationException;
 import java.util.List;
 import java.util.Optional;
+
+import static javax.transaction.Transactional.TxType.REQUIRES_NEW;
 
 
 @Service @RequiredArgsConstructor @Transactional @Slf4j
@@ -41,23 +48,22 @@ public class UserDaoServiceImplementation implements UserDaoService{
 
     @Override
     public Role saveRole(Role role) {
+
         try{
             ApplicationUserRole.valueOf(role.getName());
-            return roleRepository.save(role);
-        } catch (ConstraintViolationException cve){
+            return roleRepository.saveAndFlush(role);
+        } catch (DataIntegrityViolationException cve){
             log.info(String.format("Trying to save duplicated role %s",role.getName()));
             Throwable cause = cve.getCause();
-            String constraintName = cve.getConstraintName();
             log.info(role.getName()+" is already stored");
-            log.info(constraintName);
             log.info(cause.toString());
+            throw new RuntimeException("It is needed a custom error exception");
         } catch (IllegalArgumentException iae){
             log.error(String.format("Trying to save non-existing role %s",role.getName()));
             throw iae;
         }finally {
             log.info("Saving {} role",role.getName());
         }
-        return role;
     }
 
     public Role saveRole(String role) {
