@@ -104,9 +104,10 @@ public class UserDaoServiceImplementation implements UserDaoService{
         User user = userRepository.findByUsername(username)
                 .orElseThrow(()->new RuntimeException(String.format("User %s doesn't exists",username)));
 
-        Role role = roleRepository.findByName(roleName)
-                        .orElse(saveRole(roleName));
-
+        Role role = roleRepository.findByName(roleName).orElse(null);
+        if(role == null){
+            role = saveRole(roleName);
+        }
         user.getRolesRaw().add(role);
 
     }
