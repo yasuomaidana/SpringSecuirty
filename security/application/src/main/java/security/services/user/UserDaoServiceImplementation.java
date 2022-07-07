@@ -4,12 +4,10 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.hibernate.exception.ConstraintViolationException;
 import org.springframework.dao.DataIntegrityViolationException;
-import org.springframework.dao.DuplicateKeyException;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.UnexpectedRollbackException;
 import security.config.security.ApplicationUserPermission;
 import security.config.security.ApplicationUserRole;
 import security.models.users.Permission;
@@ -20,12 +18,8 @@ import security.repository.RoleRepository;
 import security.repository.UserRepository;
 
 import javax.transaction.Transactional;
-import java.sql.SQLException;
-import java.sql.SQLIntegrityConstraintViolationException;
 import java.util.List;
 import java.util.Optional;
-
-import static javax.transaction.Transactional.TxType.REQUIRES_NEW;
 
 
 @Service @RequiredArgsConstructor @Transactional @Slf4j
@@ -43,7 +37,12 @@ public class UserDaoServiceImplementation implements UserDaoService{
     @Override
     public User saveUser(User user){
         log.info("Saving {} user",user.getUsername());
-        return userRepository.save(user);
+        try {
+            return userRepository.saveAndFlush(user); //use saveAndFlush if you want to catch sql exceptions
+        }catch (DataIntegrityViolationException e){
+            log.error(e.getMessage()+" custom");
+            throw new RuntimeException("Duplicated user");
+        }
     }
 
     @Override
