@@ -5,6 +5,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 import security.dtos.users.CreateUserDTO;
+import security.dtos.users.RoleToUserForm;
 import security.dtos.users.UserShowAuthorities;
 import security.mappers.UserMapper;
 import security.models.users.Role;
@@ -50,4 +51,9 @@ public class UserController {
         }
     }
 
+    @PostMapping("/role/addToUser")
+    public ResponseEntity<?> addRoleToUser(@RequestBody RoleToUserForm roleToUserForm){
+        userDaoService.addRoleToUser(roleToUserForm.getUsername(), roleToUserForm.getRoleName());
+        return ResponseEntity.ok().build();
+    }
 }
