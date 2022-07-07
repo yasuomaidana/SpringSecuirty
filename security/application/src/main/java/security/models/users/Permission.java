@@ -15,7 +15,7 @@ import static javax.persistence.GenerationType.AUTO;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class Role {
+public class Permission {
     @Id
     @GeneratedValue(strategy = AUTO)
     private Long id;
