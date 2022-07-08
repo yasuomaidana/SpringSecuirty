@@ -23,10 +23,7 @@ public abstract class UserMapper {
     public abstract User createUserDtoToUser(CreateUserDTO userDto);
 
     @Mapping(target = "authorities", expression = "java(user.getAuthorities())")
-    public abstract UserDetailsImplementation userToApplicationUser(User user, boolean accountNonExpired,
-                                                                    boolean accountNonLocked,
-                                                                    boolean credentialsNonExpired,
-                                                                    boolean enabled);
+    public abstract UserDetailsImplementation userToApplicationUser(User user);
 
     @Mapping(target = "permissions", expression = "java(getAuthoritiesFromUser(user))")
     public abstract UserShowAuthorities UserToShowUser(User user);
