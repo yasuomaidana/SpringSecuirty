@@ -3,6 +3,7 @@ package security.jwt;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import io.jsonwebtoken.Jwts;
 import lombok.AllArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
@@ -16,9 +17,10 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.time.LocalDate;
+import java.util.Arrays;
 import java.util.Date;
 
-@AllArgsConstructor
+@AllArgsConstructor @Slf4j
 public class JwtUsernameAndPasswordAuthenticationFilter extends UsernamePasswordAuthenticationFilter {
 
     private final AuthenticationManager authenticationManager;
@@ -26,9 +28,10 @@ public class JwtUsernameAndPasswordAuthenticationFilter extends UsernamePassword
 
     @Override
     public Authentication attemptAuthentication(HttpServletRequest request, HttpServletResponse response) throws AuthenticationException {
+        UserAuthenticationDTO authenticationRequest = null;
         try {
 
-            UserAuthenticationDTO authenticationRequest = new ObjectMapper().readValue(request.getInputStream(), UserAuthenticationDTO.class);
+            authenticationRequest = new ObjectMapper().readValue(request.getInputStream(), UserAuthenticationDTO.class);
 
             Authentication authentication = new UsernamePasswordAuthenticationToken(
                             authenticationRequest.getUsername(),
@@ -37,6 +40,12 @@ public class JwtUsernameAndPasswordAuthenticationFilter extends UsernamePassword
             return authenticationManager.authenticate(authentication);
         } catch (IOException e) {
             throw new RuntimeException(e);
+        } catch (AuthenticationException authenticationException){
+            if(authenticationRequest!=null){
+                log.warn("Trying to log into "+ authenticationRequest.getUsername());
+            }
+            authenticationException.addSuppressed(new Throwable(authenticationRequest.getUsername()));
+            throw authenticationException;
         }
     }
 
@@ -55,5 +64,13 @@ public class JwtUsernameAndPasswordAuthenticationFilter extends UsernamePassword
                 .signWith(jwtConfig.getSecretKey()).compact();
 
         response.addHeader(jwtConfig.getAuthorizationHeader(), jwtConfig.getTokenPrefix()+token);
+    }
+
+    @Override
+    protected void unsuccessfulAuthentication(HttpServletRequest request, HttpServletResponse response, AuthenticationException failed) throws IOException, ServletException {
+        if (Arrays.stream(failed.getSuppressed()).findFirst().isPresent()){
+            log.warn("Processing "+Arrays.stream(failed.getSuppressed()).findFirst().get().getMessage());
+        }
+        super.unsuccessfulAuthentication(request, response, failed);
     }
 }
