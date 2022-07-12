@@ -21,7 +21,7 @@ public class UserDetailsServiceImplementation implements UserDetailsService {
         User user = userDAOServiceImplementation.getUser(username).orElseThrow(()
                 ->new UsernameNotFoundException(String.format("User %s not found",username)));
 
-        return mapper.userToApplicationUser(user,true,true,true,true);
+        return mapper.userToApplicationUser(user);
     }
 
 }
