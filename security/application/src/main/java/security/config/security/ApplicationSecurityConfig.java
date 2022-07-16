@@ -35,7 +35,7 @@ public class ApplicationSecurityConfig extends WebSecurityConfigurerAdapter {
                     .sessionCreationPolicy(STATELESS)
                 .and()
                 .addFilter(usernamePasswordAuthenticationFilter)
-                .addFilterAfter(new JwtTokenVerifier(jwtConfig),JwtUsernameAndPasswordAuthenticationFilter.class)
+                .addFilterBefore(new JwtTokenVerifier(jwtConfig),JwtUsernameAndPasswordAuthenticationFilter.class)
                 .authorizeHttpRequests()
                 //WhiteListing urls
                 .antMatchers("/","/index.html","/css/*","/js/*","/api/login*","/logout","/api/users/*","/api/role/**").permitAll()
