@@ -4,6 +4,7 @@ import com.google.common.base.Strings;
 import io.jsonwebtoken.*;
 import io.jsonwebtoken.security.SignatureException;
 import lombok.AllArgsConstructor;
+import lombok.NonNull;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
@@ -25,7 +26,9 @@ public class JwtTokenVerifier extends OncePerRequestFilter {
     private JwtConfig jwtConfig;
     @Override
     protected void doFilterInternal(HttpServletRequest request,
+                                    @NonNull
                                     HttpServletResponse response,
+                                    @NonNull
                                     FilterChain filterChain) throws ServletException, IOException {
         String authorizationHeader = request.getHeader(jwtConfig.getAuthorizationHeader());
         if(!Strings.isNullOrEmpty(authorizationHeader) && authorizationHeader.startsWith(jwtConfig.getTokenPrefix())){
@@ -40,6 +43,7 @@ public class JwtTokenVerifier extends OncePerRequestFilter {
 
                 String username = body.getSubject();
 
+                @SuppressWarnings("unchecked")
                 List<Map<String, String>> authorities =
                         (List<Map<String, String>>) body.get(jwtConfig.getAuthoritiesPrefix());
 
