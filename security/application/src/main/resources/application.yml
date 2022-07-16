@@ -19,6 +19,7 @@ application:
   jwt:
     secretKey: "secured string using several chars, you should change your secret strategy, but that's for later"
     tokenPrefix: "Bearer "
+    refreshTokenPrefix: "refresh_token"
     tokenExpirationAfterDays: 14
     authoritiesPrefix: "authorities"
     singleAuthorityPrefix: "authority"

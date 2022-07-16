@@ -19,6 +19,10 @@ import java.io.IOException;
 import java.time.LocalDate;
 import java.util.Arrays;
 import java.util.Date;
+import java.util.HashMap;
+import java.util.Map;
+
+import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
 
 @AllArgsConstructor @Slf4j
 public class JwtUsernameAndPasswordAuthenticationFilter extends UsernamePasswordAuthenticationFilter {
@@ -44,6 +48,7 @@ public class JwtUsernameAndPasswordAuthenticationFilter extends UsernamePassword
             if(authenticationRequest!=null){
                 log.warn("Trying to log into "+ authenticationRequest.getUsername());
             }
+            assert authenticationRequest != null;
             authenticationException.addSuppressed(new Throwable(authenticationRequest.getUsername()));
             throw authenticationException;
         }
@@ -59,11 +64,25 @@ public class JwtUsernameAndPasswordAuthenticationFilter extends UsernamePassword
         String token = Jwts.builder()
                 .setSubject(authResult.getName())
                 .claim(jwtConfig.getAuthoritiesPrefix(),authResult.getAuthorities())
+                .setIssuer("Who wrote the issue")
                 .setIssuedAt(new Date())
                 .setExpiration(java.sql.Date.valueOf(LocalDate.now().plusWeeks(jwtConfig.getTokenExpirationAfterDays())))
                 .signWith(jwtConfig.getSecretKey()).compact();
 
+        String refreshToken = Jwts.builder()
+                .setSubject(authResult.getName())
+                .setIssuer(request.getRequestURL().toString())
+                .setExpiration(java.sql.Date.valueOf(LocalDate.now().plusWeeks(jwtConfig.getTokenExpirationAfterDays()* 2L)))
+                .signWith(jwtConfig.getSecretKey()).compact();
+
         response.addHeader(jwtConfig.getAuthorizationHeader(), jwtConfig.getTokenPrefix()+token);
+        response.addHeader(jwtConfig.getRefreshTokenPrefix(),refreshToken);
+        response.setContentType(APPLICATION_JSON_VALUE);
+        Map<String,String> tokens = new HashMap<>();
+        tokens.put(jwtConfig.getAuthorizationHeader(),token);
+        tokens.put(jwtConfig.getRefreshTokenPrefix(),refreshToken);
+        new ObjectMapper().writeValue(response.getOutputStream(),tokens);
+
     }
 
     @Override

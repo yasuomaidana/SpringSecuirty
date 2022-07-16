@@ -18,6 +18,7 @@ public class JwtConfig {
     private int tokenExpirationAfterDays;
     private String authoritiesPrefix;
     private String singleAuthorityPrefix;
+    private String refreshTokenPrefix;
 
     public SecretKey getSecretKey(){
         StringBuilder preparedKey = new StringBuilder();

@@ -1,5 +1,6 @@
 package security.config;
 
+import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.context.event.ApplicationReadyEvent;
@@ -19,7 +20,7 @@ public class UserLoader implements ApplicationListener<ApplicationReadyEvent> {
     @Autowired
     private final UserMapper userMapper;
     @Override
-    public void onApplicationEvent(ApplicationReadyEvent event) {
+    public void onApplicationEvent(@NonNull ApplicationReadyEvent event) {
         CreateUserDTO newUser;
         User userMapped;
         if(!userDAOServiceImplementation.getUser("tom").isPresent()){
