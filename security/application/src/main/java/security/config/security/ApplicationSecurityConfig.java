@@ -28,7 +28,7 @@ public class ApplicationSecurityConfig extends WebSecurityConfigurerAdapter {
 
         http.cors().and()
                 .csrf()//.disable()
-                    .ignoringAntMatchers("/api/login*","/logout*","/api/users/**","/api/role/**")// to ignore specific paths from csrf
+                    .ignoringAntMatchers("/api/login/**","/logout*","/api/users/**","/api/role/**")// to ignore specific paths from csrf
                     .csrfTokenRepository(CookieCsrfTokenRepository.withHttpOnlyFalse())
                 .and()
                 .sessionManagement()
@@ -38,7 +38,7 @@ public class ApplicationSecurityConfig extends WebSecurityConfigurerAdapter {
                 .addFilterBefore(new JwtTokenVerifier(jwtConfig),JwtUsernameAndPasswordAuthenticationFilter.class)
                 .authorizeHttpRequests()
                 //WhiteListing urls
-                .antMatchers("/","/index.html","/css/*","/js/*","/api/login*","/logout","/api/users/*","/api/role/**").permitAll()
+                .antMatchers("/","/index.html","/css/*","/js/*","/api/login/**","/logout","/api/users/*","/api/role/**").permitAll()
                 .anyRequest()
                 .authenticated();
     }
