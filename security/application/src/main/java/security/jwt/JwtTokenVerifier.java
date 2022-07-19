@@ -35,7 +35,7 @@ public class JwtTokenVerifier extends OncePerRequestFilter {
                                     @NonNull
                                     FilterChain filterChain) throws ServletException, IOException {
         String authorizationHeader = request.getHeader(jwtConfig.getAuthorizationHeader());
-        if(!request.getServletPath().equals("/api/login") &&
+        if(!request.getServletPath().startsWith("/api/login") &&
                 !Strings.isNullOrEmpty(authorizationHeader) &&
                 authorizationHeader.startsWith(jwtConfig.getTokenPrefix())){
             String token = authorizationHeader.replace(jwtConfig.getTokenPrefix(),"");
